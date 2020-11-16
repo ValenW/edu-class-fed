@@ -13,13 +13,15 @@
       label-width="80px"
     >
       <el-form-item label="手机号" prop="phone">
-        <el-input></el-input>
+        <el-input type="number" v-model="form.phone"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input type="password"></el-input>
+        <el-input type="password" v-model="form.password"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button class="login-btn" type="primary">登录</el-button>
+        <el-button class="login-btn" type="primary" @click="submit"
+          >登录</el-button
+        >
       </el-form-item>
     </el-form>
   </div>
@@ -27,11 +29,32 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { login } from '@/utils/request'
 
 export default Vue.extend({
   name: 'LoginIndex',
   data() {
-    return {}
+    return {
+      form: {
+        phone: '',
+        password: ''
+      }
+    }
+  },
+  methods: {
+    async submit() {
+      const {
+        data: { content, message, success }
+      } = await login(this.form)
+      if (!success) {
+        this.$message.error(message)
+      } else {
+        this.$message.success('login success!')
+        const data = JSON.parse(content)
+        console.log(data.access_token)
+        this.$router.push({ name: 'home' })
+      }
+    }
   }
 })
 </script>
