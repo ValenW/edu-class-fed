@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1>Hello Vue</h1>
+    <h1 class="test">Hello Vue</h1>
     <router-view />
 
     <el-row>
@@ -53,4 +53,8 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="less" scoped></style>
+<style lang="scss" scoped>
+.test {
+  color: $info-color;
+}
+</style>
