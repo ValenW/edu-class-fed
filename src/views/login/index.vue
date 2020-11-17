@@ -1,22 +1,22 @@
 <template>
   <div class="login">
-    <!--
-      1. :model="ruleForm"
-      2. :rules="rules"
-      3. ref="ruleForm"
-      4. el-form-item 绑定 prop 属性
-     -->
     <el-form
       class="login-form"
       label-position="top"
       ref="form"
+      :rules="rules"
+      :model="form"
       label-width="80px"
     >
       <el-form-item label="手机号" prop="phone">
-        <el-input type="number" v-model="form.phone"></el-input>
+        <el-input type="text" v-model="form.phone" prop="phone"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input type="password" v-model="form.password"></el-input>
+        <el-input
+          type="password"
+          v-model="form.password"
+          prop="password"
+        ></el-input>
       </el-form-item>
       <el-form-item>
         <el-button class="login-btn" type="primary" @click="submit"
@@ -30,6 +30,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { login } from '@/utils/request'
+import { Form } from 'element-ui'
 
 export default Vue.extend({
   name: 'LoginIndex',
@@ -38,11 +39,24 @@ export default Vue.extend({
       form: {
         phone: '',
         password: ''
+      },
+      rules: {
+        phone: [
+          { required: true, message: '请输入手机号', trigger: 'blur' },
+          { pattern: /^1\d{10}$/, message: '请输入正确手机号', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, max: 18, message: '密码长度应为6到18', trigger: 'blur' }
+        ]
       }
     }
   },
   methods: {
     async submit() {
+      if (!(await this.validateForm())) {
+        return
+      }
       const {
         data: { content, message, success }
       } = await login(this.form)
@@ -51,9 +65,19 @@ export default Vue.extend({
       } else {
         this.$message.success('login success!')
         const data = JSON.parse(content)
+        // TODO deal with access token
         console.log(data.access_token)
         this.$router.push({ name: 'home' })
       }
+    },
+    async validateForm(): Promise<boolean> {
+      try {
+        await (this.$refs.form as Form).validate()
+        return true
+      } catch (err) {
+        console.log('validate form failed', err)
+      }
+      return false
     }
   }
 })
