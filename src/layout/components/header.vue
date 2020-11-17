@@ -6,7 +6,7 @@
       <el-breadcrumb-item>活动列表</el-breadcrumb-item>
       <el-breadcrumb-item>活动详情</el-breadcrumb-item>
     </el-breadcrumb>
-    <el-dropdown>
+    <el-dropdown @command="handleCommand">
       <span class="el-dropdown-link">
         <el-avatar
           shape="square"
@@ -17,7 +17,7 @@
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item>用户ID</el-dropdown-item>
-        <el-dropdown-item divided>退出</el-dropdown-item>
+        <el-dropdown-item divided command="logout">退出</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -27,7 +27,15 @@
 import Vue from 'vue'
 
 export default Vue.extend({
-  name: 'AppHeader'
+  name: 'AppHeader',
+  methods: {
+    handleCommand(command: string) {
+      if (command === 'logout') {
+        this.$store.commit('setUser', null)
+        this.$router.push({ name: 'login' })
+      }
+    }
+  }
 })
 </script>
 

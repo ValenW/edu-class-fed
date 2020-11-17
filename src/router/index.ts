@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router, { RouteConfig } from 'vue-router'
 import Layout from '@/layout/index.vue'
+import store from '@/store'
 
 Vue.use(Router)
 
@@ -14,6 +15,7 @@ const routes: RouteConfig[] = [
   {
     path: '/',
     component: Layout,
+    meta: { requireAuth: true },
     children: [
       {
         path: '/',
@@ -81,6 +83,13 @@ const routes: RouteConfig[] = [
   }
 ]
 
-export default new Router({
-  routes
+const router = new Router({ routes })
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requireAuth) && !store.state.user) {
+    next({ name: 'login', query: { redirect: from.fullPath } })
+  }
+  next()
 })
+
+export default router
