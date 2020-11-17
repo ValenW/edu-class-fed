@@ -19,7 +19,11 @@
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button class="login-btn" type="primary" @click="submit"
+        <el-button
+          class="login-btn"
+          type="primary"
+          @click="submit"
+          :loading="doingLogin"
           >登录</el-button
         >
       </el-form-item>
@@ -36,6 +40,7 @@ export default Vue.extend({
   name: 'LoginIndex',
   data() {
     return {
+      doingLogin: false,
       form: {
         phone: '',
         password: ''
@@ -54,7 +59,9 @@ export default Vue.extend({
   },
   methods: {
     async submit() {
+      this.doingLogin = true
       if (!(await this.validateForm())) {
+        this.doingLogin = false
         return
       }
       const {
@@ -69,6 +76,7 @@ export default Vue.extend({
         console.log(data.access_token)
         this.$router.push({ name: 'home' })
       }
+      this.doingLogin = false
     },
     async validateForm(): Promise<boolean> {
       try {
