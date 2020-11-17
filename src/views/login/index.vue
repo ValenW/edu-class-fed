@@ -74,7 +74,8 @@ export default Vue.extend({
 
         this.$store.commit('setUser', JSON.parse(content))
         this.$message.success('login success!')
-        this.$router.push({ name: 'home' })
+        const redirect = this.$route.query.redirect || '/home'
+        this.$router.push(redirect as string)
       } catch (err) {
         this.$message.error(err)
       }
