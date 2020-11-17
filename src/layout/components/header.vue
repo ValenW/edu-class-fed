@@ -46,8 +46,17 @@ export default Vue.extend({
     },
     handleCommand(command: string) {
       if (command === 'logout') {
-        this.$store.commit('setUser', null)
-        this.$router.push({ name: 'login' })
+        this.$confirm('确认退出吗?', '退出登录', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+          .then(() => {
+            this.$store.commit('setUser', null)
+            this.$router.push({ name: 'login' })
+            this.$message('退出登录成功')
+          })
+          .catch()
       }
     }
   }
