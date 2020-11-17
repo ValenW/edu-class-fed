@@ -59,23 +59,29 @@ export default Vue.extend({
   },
   methods: {
     async submit() {
-      this.doingLogin = true
       if (!(await this.validateForm())) {
-        this.doingLogin = false
         return
       }
-      const {
-        data: { content, message, success }
-      } = await login(this.form)
-      if (!success) {
-        this.$message.error(message)
-      } else {
+
+      this.doingLogin = true
+      try {
+        const {
+          data: { content, message, success }
+        } = await login(this.form)
+
+        if (!success) {
+          throw message
+        }
+
         this.$message.success('login success!')
         const data = JSON.parse(content)
         // TODO deal with access token
         console.log(data.access_token)
         this.$router.push({ name: 'home' })
+      } catch (err) {
+        this.$message.error(err)
       }
+
       this.doingLogin = false
     },
     async validateForm(): Promise<boolean> {
