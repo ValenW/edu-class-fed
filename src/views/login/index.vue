@@ -68,15 +68,12 @@ export default Vue.extend({
         const {
           data: { content, message, success }
         } = await login(this.form)
-
         if (!success) {
           throw message
         }
 
+        this.$store.commit('setUser', JSON.parse(content))
         this.$message.success('login success!')
-        const data = JSON.parse(content)
-        // TODO deal with access token
-        console.log(data.access_token)
         this.$router.push({ name: 'home' })
       } catch (err) {
         this.$message.error(err)
