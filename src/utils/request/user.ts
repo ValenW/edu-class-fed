@@ -2,6 +2,11 @@ import request from './'
 import qs from 'qs'
 import { AxiosRequestConfig } from 'axios'
 
+interface User {
+  phone: string
+  password: string
+}
+
 const basePath = '/front/user'
 const userRequest = (config: AxiosRequestConfig) => {
   return request({
@@ -10,7 +15,7 @@ const userRequest = (config: AxiosRequestConfig) => {
   })
 }
 
-export const login = (data: { phone: string; password: string }) =>
+export const login = (data: User) =>
   userRequest({
     method: 'POST',
     url: `/login`,
