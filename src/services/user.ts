@@ -1,7 +1,6 @@
 import request from '../utils/request'
 import qs from 'qs'
-import { AxiosRequestConfig } from 'axios'
-import store from '@/store'
+import axios, { AxiosRequestConfig } from 'axios'
 
 interface User {
   phone: string
@@ -31,3 +30,12 @@ export const userInfo = () =>
     method: 'GET',
     url: `/getInfo`
   })
+
+export const refreshToken = (refreshToken: string) => {
+  // not use request to avoid response interceptors
+  return axios.create()({
+    method: 'POST',
+    url: `${basePath}/refresh_token`,
+    data: qs.stringify({ refreshtoken: refreshToken })
+  })
+}
