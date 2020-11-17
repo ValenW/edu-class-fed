@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { login } from '@/utils/request'
+import { login } from '@/services/user'
 import { Form } from 'element-ui'
 
 export default Vue.extend({

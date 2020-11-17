@@ -1,6 +1,7 @@
-import request from './'
+import request from '../utils/request'
 import qs from 'qs'
 import { AxiosRequestConfig } from 'axios'
+import store from '@/store'
 
 interface User {
   phone: string
@@ -23,4 +24,10 @@ export const login = (data: User) =>
       'content-type': 'application/x-www-form-urlencoded'
     },
     data: qs.stringify(data)
+  })
+
+export const userInfo = () =>
+  userRequest({
+    method: 'GET',
+    url: `/getInfo`
   })
