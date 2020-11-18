@@ -32,67 +32,63 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 import { login } from '@/services/user'
 import { Form } from 'element-ui'
 
-export default Vue.extend({
-  name: 'LoginIndex',
-  data() {
-    return {
-      doingLogin: false,
-      form: {
-        phone: '',
-        password: ''
-      },
-      rules: {
-        phone: [
-          { required: true, message: '请输入手机号', trigger: 'blur' },
-          { pattern: /^1\d{10}$/, message: '请输入正确手机号', trigger: 'blur' }
-        ],
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 6, max: 18, message: '密码长度应为6到18', trigger: 'blur' }
-        ]
-      }
-    }
-  },
-  methods: {
-    async submit() {
-      if (!(await this.validateForm())) {
-        return
-      }
-
-      this.doingLogin = true
-      try {
-        const {
-          data: { content, message, success }
-        } = await login(this.form)
-        if (!success) {
-          throw message
-        }
-
-        this.$store.commit('setUser', JSON.parse(content))
-        this.$message.success('login success!')
-        const redirect = this.$route.query.redirect || '/home'
-        this.$router.push(redirect as string)
-      } catch (err) {
-        this.$message.error(err)
-      }
-
-      this.doingLogin = false
-    },
-    async validateForm(): Promise<boolean> {
-      try {
-        await (this.$refs.form as Form).validate()
-        return true
-      } catch (err) {
-        console.log('validate form failed', err)
-      }
-      return false
-    }
+@Component
+export default class LoginIndex extends Vue {
+  private doingLogin = false
+  private form = {
+    phone: '',
+    password: ''
   }
-})
+  private rules = {
+    phone: [
+      { required: true, message: '请输入手机号', trigger: 'blur' },
+      { pattern: /^1\d{10}$/, message: '请输入正确手机号', trigger: 'blur' }
+    ],
+    password: [
+      { required: true, message: '请输入密码', trigger: 'blur' },
+      { min: 6, max: 18, message: '密码长度应为6到18', trigger: 'blur' }
+    ]
+  }
+
+  async submit() {
+    if (!(await this.validateForm())) {
+      return
+    }
+
+    this.doingLogin = true
+    try {
+      const {
+        data: { content, message, success }
+      } = await login(this.form)
+      if (!success) {
+        throw message
+      }
+
+      this.$store.commit('setUser', JSON.parse(content))
+      this.$message.success('login success!')
+      const redirect = this.$route.query.redirect || '/'
+      this.$router.push(redirect as string)
+    } catch (err) {
+      this.$message.error(err)
+    }
+
+    this.doingLogin = false
+  }
+
+  private async validateForm(): Promise<boolean> {
+    try {
+      await (this.$refs.form as Form).validate()
+      return true
+    } catch (err) {
+      console.log('validate form failed', err)
+    }
+    return false
+  }
+}
 </script>
 
 <style lang="scss" scoped>
