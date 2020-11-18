@@ -15,7 +15,7 @@
           <el-select v-model="form.parentId" placeholder="请选择上级菜单">
             <el-option :value="-1" label="无上级菜单"></el-option>
             <el-option
-              v-for="item in parentMenuList"
+              v-for="item in parentOptionList"
               :key="item.id"
               :label="item.name"
               :value="item.id"
@@ -52,12 +52,14 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { createOrUpdateMenu, MenuForm } from '@/services/menu'
+import {
+  createOrUpdateMenu,
+  getEditMenuInfo,
+  MenuForm,
+  Menu
+} from '@/services/menu'
 
-interface ParentMenuItem {
-  id: string
-  name: string
-}
+type ParentOptionItem = Pick<Menu, 'id' | 'name'>
 
 @Component
 export default class MenuCreate extends Vue {
@@ -71,7 +73,33 @@ export default class MenuCreate extends Vue {
     shown: false
   }
   private editMode: boolean = false
-  private parentMenuList: ParentMenuItem[] = []
+  private parentMenuList: Menu[] = []
+
+  private get parentOptionList(): ParentOptionItem[] {
+    return this.parentMenuList.map(parent => ({
+      name: parent.name,
+      id: parent.id
+    }))
+  }
+
+  private created() {
+    this.loadMenuInfo()
+  }
+
+  private async loadMenuInfo() {
+    const {
+      data: {
+        code,
+        data: { menuInfo, parentMenuList }
+      }
+    } = await getEditMenuInfo()
+    if (Number.parseInt(code)) {
+      this.$message.error('获取上级菜单失败, 请联系管理员')
+      return
+    }
+
+    this.parentMenuList = parentMenuList || []
+  }
 
   private async onSubmit() {
     const {
