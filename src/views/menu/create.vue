@@ -52,16 +52,8 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import { createOrUpdateMenu, MenuForm } from '@/services/menu'
 
-interface MenuForm {
-  parentId: number
-  name: string
-  href: string
-  icon: string
-  orderNum: number
-  description: string
-  shown: boolean
-}
 interface ParentMenuItem {
   id: string
   name: string
@@ -70,7 +62,7 @@ interface ParentMenuItem {
 @Component
 export default class MenuCreate extends Vue {
   private form: MenuForm = {
-    parentId: 0,
+    parentId: -1,
     name: '',
     href: '',
     icon: '',
@@ -81,7 +73,17 @@ export default class MenuCreate extends Vue {
   private editMode: boolean = false
   private parentMenuList: ParentMenuItem[] = []
 
-  private onSubmit() {}
+  private async onSubmit() {
+    const {
+      data: { code, mesg }
+    } = await createOrUpdateMenu(this.form)
+    if (Number(code)) {
+      this.$message.error(`更新菜单失败: ${mesg} 请联系管理员`)
+    } else {
+      this.$message.success(`更新菜单成功`)
+      this.$router.back()
+    }
+  }
 }
 </script>
 

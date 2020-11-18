@@ -1,7 +1,7 @@
 import router from '@/router'
 import { refreshToken } from '@/services/user'
 import store from '@/store'
-import axios from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import { Message } from 'element-ui'
 
 const request = axios.create({
@@ -88,3 +88,11 @@ const redirectLogin = () => {
 }
 
 export default request
+
+export const buildRequestWithBaseUrl = (basePath: string) => (
+  config: AxiosRequestConfig
+) =>
+  request({
+    ...config,
+    url: `${basePath}${config.url}`
+  })

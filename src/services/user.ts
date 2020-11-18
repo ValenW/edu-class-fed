@@ -1,6 +1,6 @@
-import request from '../utils/request'
+import { buildRequestWithBaseUrl } from '../utils/request'
 import qs from 'qs'
-import axios, { AxiosRequestConfig } from 'axios'
+import axios from 'axios'
 
 interface User {
   phone: string
@@ -8,12 +8,7 @@ interface User {
 }
 
 const basePath = '/front/user'
-const userRequest = (config: AxiosRequestConfig) => {
-  return request({
-    ...config,
-    url: `${basePath}${config.url}`
-  })
-}
+const userRequest = buildRequestWithBaseUrl(basePath)
 
 export const login = (data: User) =>
   userRequest({
