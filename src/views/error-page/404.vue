@@ -5,11 +5,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 
-export default Vue.extend({
-  name: 'NotFound'
-})
+@Component
+export default class NotFound extends Vue {}
 </script>
 
 <style lang="scss" scoped></style>

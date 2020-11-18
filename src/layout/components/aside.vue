@@ -54,20 +54,18 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 
-export default Vue.extend({
-  name: 'AppAside',
-  methods: {
-    handleOpen(key: string, keyPath: string): void {
-      console.log(key, keyPath)
-    },
-
-    handleClose(key: string, keyPath: string): void {
-      console.log(key, keyPath)
-    }
+@Component
+export default class AppAside extends Vue {
+  private handleOpen(key: string, keyPath: string): void {
+    console.log(key, keyPath)
   }
-})
+
+  private handleClose(key: string, keyPath: string): void {
+    console.log(key, keyPath)
+  }
+}
 </script>
 
 <style lang="scss" scoped>

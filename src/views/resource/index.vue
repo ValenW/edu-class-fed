@@ -3,11 +3,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 
-export default Vue.extend({
-  name: 'ResourceIndex'
-})
+@Component
+export default class ResourceIndex extends Vue {}
 </script>
 
 <style lang="scss" scoped></style>

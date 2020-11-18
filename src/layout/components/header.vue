@@ -24,43 +24,40 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 import { userInfo } from '@/services/user'
 
-export default Vue.extend({
-  name: 'AppHeader',
-  data() {
-    return {
-      userInfo: {}
-    }
-  },
-  mounted() {
+@Component
+export default class AppHeader extends Vue {
+  private userInfo = {}
+
+  private mounted() {
     this.loadUserInfo()
-  },
-  methods: {
-    async loadUserInfo() {
-      const {
-        data: { content }
-      } = await userInfo()
-      this.userInfo = content
-    },
-    handleCommand(command: string) {
-      if (command === 'logout') {
-        this.$confirm('确认退出吗?', '退出登录', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
+  }
+
+  private async loadUserInfo() {
+    const {
+      data: { content }
+    } = await userInfo()
+    this.userInfo = content
+  }
+
+  private handleCommand(command: string) {
+    if (command === 'logout') {
+      this.$confirm('确认退出吗?', '退出登录', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          this.$store.commit('setUser', null)
+          this.$router.push({ name: 'login' })
+          this.$message('退出登录成功')
         })
-          .then(() => {
-            this.$store.commit('setUser', null)
-            this.$router.push({ name: 'login' })
-            this.$message('退出登录成功')
-          })
-          .catch()
-      }
+        .catch()
     }
   }
-})
+}
 </script>
 
 <style lang="scss" scoped>

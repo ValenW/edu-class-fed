@@ -3,11 +3,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 
-export default Vue.extend({
-  name: 'HomeIndex'
-})
+@Component
+export default class HomeIndex extends Vue {}
 </script>
 
 <style lang="scss" scoped></style>

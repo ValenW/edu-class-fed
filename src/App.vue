@@ -5,15 +5,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 
-export default Vue.extend({
-  data() {
-    return {
-      msg: 'Hello world'
-    }
-  }
-})
+@Component
+export default class App extends Vue {}
 </script>
 
 <style lang="scss" scoped>
