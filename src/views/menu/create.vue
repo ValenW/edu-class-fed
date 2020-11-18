@@ -54,13 +54,13 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
 interface MenuForm {
+  parentId: number
   name: string
   href: string
-  parentId: string
-  description: string
   icon: string
-  shown: string
-  orderNum: string
+  orderNum: number
+  description: string
+  shown: boolean
 }
 interface ParentMenuItem {
   id: string
@@ -70,13 +70,13 @@ interface ParentMenuItem {
 @Component
 export default class MenuCreate extends Vue {
   private form: MenuForm = {
+    parentId: 0,
     name: '',
     href: '',
-    parentId: '',
-    description: '',
     icon: '',
-    shown: '',
-    orderNum: ''
+    orderNum: 0,
+    description: '',
+    shown: false
   }
   private editMode: boolean = false
   private parentMenuList: ParentMenuItem[] = []
