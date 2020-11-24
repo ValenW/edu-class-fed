@@ -38,8 +38,15 @@ export const createOrUpdateMenu = (data: MenuForm) =>
     data
   })
 
+export const getAllMenuInfo = () =>
+  menuRequest({
+    method: 'GET',
+    url: '/getAll'
+  })
+
 export const getEditMenuInfo = (id: string = '-1') =>
   menuRequest({
+    method: 'GET',
     url: '/getEditMenuInfo',
     params: { id }
   })
