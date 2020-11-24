@@ -1,8 +1,8 @@
 <template>
-  <div class="menu-create">
+  <div :class="`menu-${createMode ? 'create' : 'edit'}`">
     <el-card class="menu">
       <div slot="header" class="clearfix">
-        <span>添加菜单</span>
+        <span>{{ createMode ? '添加菜单' : '更新菜单' }}</span>
       </div>
       <el-form ref="form" :model="form" label-width="80px">
         <el-form-item label="菜单名称">
@@ -43,7 +43,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">提交</el-button>
-          <el-button v-if="!editMode">重置</el-button>
+          <el-button v-if="createMode">重置</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -63,6 +63,9 @@ type ParentOptionItem = Pick<Menu, 'id' | 'name'>
 
 @Component
 export default class MenuCreate extends Vue {
+  @Prop(Boolean)
+  createMode: boolean = false
+
   private form: MenuForm = {
     parentId: -1,
     name: '',
@@ -72,7 +75,6 @@ export default class MenuCreate extends Vue {
     description: '',
     shown: false
   }
-  private editMode: boolean = false
   private parentMenuList: Menu[] = []
 
   private get parentOptionList(): ParentOptionItem[] {
@@ -105,10 +107,12 @@ export default class MenuCreate extends Vue {
     const {
       data: { code, mesg }
     } = await createOrUpdateMenu(this.form)
+
+    const actionName = this.createMode ? '创建' : '更新'
     if (Number(code)) {
-      this.$message.error(`更新菜单失败: ${mesg} 请联系管理员`)
+      this.$message.error(`${actionName}菜单失败: ${mesg} 请联系管理员`)
     } else {
-      this.$message.success(`更新菜单成功`)
+      this.$message.success(`${actionName}菜单成功`)
       this.$router.back()
     }
   }
