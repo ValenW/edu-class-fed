@@ -1,4 +1,4 @@
-import request, { buildRequestWithBaseUrl } from '@/utils/request'
+import { buildRequestWithBaseUrl } from '@/utils/request'
 
 const baseUrl = '/boss/menu'
 const menuRequest = buildRequestWithBaseUrl(baseUrl)
@@ -49,4 +49,10 @@ export const getEditMenuInfo = (id: string = '-1') =>
     method: 'GET',
     url: '/getEditMenuInfo',
     params: { id }
+  })
+
+export const deleteMenu = (id: number) =>
+  menuRequest({
+    method: 'DELETE',
+    url: `/${id}`
   })

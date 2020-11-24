@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { getAllMenuInfo, Menu } from '@/services/menu'
+import { deleteMenu, getAllMenuInfo, Menu } from '@/services/menu'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
 @Component
@@ -58,6 +58,18 @@ export default class MenuIndex extends Vue {
 
   private handleDelete(menu: Menu) {
     console.log('handleDelete', menu)
+    this.$confirm('确认删除?', '删除菜单', {})
+      .then(async () => {
+        const {
+          data: { code, mesg }
+        } = await deleteMenu(menu.id)
+        if (Number.parseInt(code)) {
+          throw new Error(mesg)
+        }
+        this.$message.success('删除成功')
+        this.fetchMenus()
+      })
+      .catch(() => this.$message.info('取消删除'))
   }
 }
 </script>
