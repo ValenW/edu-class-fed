@@ -62,6 +62,12 @@ const routes: RouteConfig[] = [
           )
       },
       {
+        name: 'menu-edit',
+        path: '/menu/:id/edit',
+        component: () =>
+          import(/* webpackChunkName: 'menu-edit' */ '@/views/menu/edit.vue')
+      },
+      {
         name: 'resource',
         path: '/resource',
         component: () =>

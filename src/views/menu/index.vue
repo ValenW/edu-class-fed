@@ -53,6 +53,10 @@ export default class MenuIndex extends Vue {
   }
 
   private handleEdit(menu: Menu) {
+    this.$router.push({
+      name: 'menu-edit',
+      params: { id: `${menu.id}` }
+    })
     console.log('handleEdit', menu)
   }
 

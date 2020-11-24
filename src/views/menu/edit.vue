@@ -1,5 +1,5 @@
 <template>
-  <Update />
+  <Update :create-mode="false" />
 </template>
 
 <script lang="ts">
@@ -9,7 +9,7 @@ import Update from './components/update.vue'
 @Component({
   components: { Update }
 })
-export default class MenuCreate extends Vue {}
+export default class MenuEdit extends Vue {}
 </script>
 
 <style scoped></style>

@@ -62,9 +62,9 @@ import {
 type ParentOptionItem = Pick<Menu, 'id' | 'name'>
 
 @Component
-export default class MenuCreate extends Vue {
-  @Prop(Boolean)
-  createMode: boolean = false
+export default class Update extends Vue {
+  @Prop({ type: Boolean, default: true })
+  createMode!: boolean
 
   private form: MenuForm = {
     parentId: -1,
