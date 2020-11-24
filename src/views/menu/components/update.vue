@@ -94,12 +94,13 @@ export default class Update extends Vue {
         code,
         data: { menuInfo, parentMenuList }
       }
-    } = await getEditMenuInfo()
+    } = await getEditMenuInfo(this.$route.params.id || '-1')
     if (Number.parseInt(code)) {
       this.$message.error('获取上级菜单失败, 请联系管理员')
       return
     }
 
+    this.form = menuInfo
     this.parentMenuList = parentMenuList || []
   }
 
