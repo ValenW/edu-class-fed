@@ -38,6 +38,9 @@ import { Form } from 'element-ui'
 
 @Component
 export default class LoginIndex extends Vue {
+  $refs!: {
+    form: Form
+  }
   private doingLogin = false
   private form = {
     phone: '',
@@ -81,7 +84,7 @@ export default class LoginIndex extends Vue {
 
   private async validateForm(): Promise<boolean> {
     try {
-      await (this.$refs.form as Form).validate()
+      await this.$refs.form.validate()
       return true
     } catch (err) {
       console.log('validate form failed', err)
