@@ -7,6 +7,7 @@
     </div>
 
     <el-tree
+      ref="tree"
       :props="menuProps"
       :data="menus"
       node-key="id"
@@ -35,6 +36,9 @@ export default class AssignMenu extends Vue {
   @Prop({ type: String, required: true })
   private roleId!: string
 
+  $refs!: {
+    tree: Tree
+  }
   private menus: Menu[] = []
   private menusByRole: Menu[] = []
   private menuProps: { [key in keyof TreeData]: keyof Menu } = {

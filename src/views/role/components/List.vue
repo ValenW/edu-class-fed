@@ -68,7 +68,9 @@ export default class RoleList extends Vue {
   }
   private roles: Role[] = []
   private form: RoleQueryParam = {
-    name: ''
+    name: '',
+    current: 2,
+    size: 20
   }
   private roleId?: number
   private loading: boolean = false
