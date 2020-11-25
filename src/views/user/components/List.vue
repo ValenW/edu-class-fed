@@ -12,15 +12,17 @@
       <el-form-item label="手机号" prop="phone">
         <el-input v-model="form.phone"></el-input>
       </el-form-item>
-      <el-form-item label="注册时间" prop="rangeDate">
+      <el-form-item label="注册时间" prop="dateRange">
         <el-date-picker
-          v-model="form.rangeDate"
-          type="datetimerange"
+          v-model="form.dateRange"
+          type="daterange"
+          align="right"
+          unlink-panels
           range-separator="至"
-          start-placeholder="开始时间"
-          end-placeholder="结束时间"
-          value-format="yyyy-MM-dd"
-        />
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        >
+        </el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button :disabled="loading" @click="handleReset">重置</el-button>
@@ -101,6 +103,7 @@
 <script lang="ts">
 import { getByPage, User, UserQueryParam } from '@/services/user'
 import { Role } from '@/services/role'
+import { safeDate } from '@/utils'
 import { Form } from 'element-ui'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
@@ -112,7 +115,27 @@ export default class List extends Vue {
     form: Form
   }
   private users: User[] = []
-  private form: UserQueryParam = {}
+  private form: UserQueryParam & { dateRange: [string, string] } = {
+    pageSize: 10,
+    currentPage: 1,
+    startCreateTime: undefined,
+    endCreateTime: undefined,
+    get dateRange(): [string, string] {
+      if (this.startCreateTime && this.endCreateTime) {
+        return [
+          this.startCreateTime.toISOString(),
+          this.endCreateTime.toISOString()
+        ]
+      }
+      return ['', '']
+    },
+
+    set dateRange(data: [string, string]) {
+      this.startCreateTime = (data && safeDate(data[0])) || undefined
+      this.endCreateTime = (data && safeDate(data[1])) || undefined
+    }
+  }
+
   private loading: boolean = false
   private dialogVisible: boolean = false
   private roles: Role[] = []
@@ -140,9 +163,14 @@ export default class List extends Vue {
 
   private async handleForbidUser(user: any) {}
 
-  private handleQuery() {}
+  private handleQuery() {
+    this.reloadData()
+  }
 
-  private handleReset() {}
+  private handleReset() {
+    this.$refs.form.resetFields()
+    this.reloadData()
+  }
 
   private async handleSelectRole(role: any) {}
 
