@@ -16,7 +16,7 @@ export interface User {
   accountNonExpired: boolean
   credentialsNonExpired: boolean
   accountNonLocked: boolean
-  status: string
+  status: 'DISABLE' | 'ENABLE'
   isDel: boolean
   createTime: string
   updateTime: string
@@ -73,4 +73,16 @@ export const getByPage = (data: UserQueryParam) =>
       endCreateTime:
         (data.endCreateTime && data.endCreateTime.toISOString()) || undefined
     }
+  })
+
+export const forbidUser = (userId: number) =>
+  userRequest({
+    url: '/forbidUser',
+    params: { userId }
+  })
+
+export const enableUser = (userId: number) =>
+  userRequest({
+    url: '/enableUser',
+    params: { userId }
   })

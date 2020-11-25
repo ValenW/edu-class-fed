@@ -50,7 +50,8 @@
             inactive-value="DISABLE"
             active-color="#13ce66"
             inactive-color="#ff4949"
-            @change="handleForbidUser(row)"
+            :disabled="updatingStatus[row.id]"
+            @change="toggleUserEnable(row)"
           >
           </el-switch>
         </template>
@@ -102,11 +103,18 @@
 </template>
 
 <script lang="ts">
-import { getByPage, User, UserQueryParam } from '@/services/user'
+import {
+  enableUser,
+  forbidUser,
+  getByPage,
+  User,
+  UserQueryParam
+} from '@/services/user'
 import { assignRolesToUser, getAll, getUserRole, Role } from '@/services/role'
 import { safeDate } from '@/utils'
 import { Form } from 'element-ui'
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import { use } from 'vue/types/umd'
 
 @Component({
   components: {}
@@ -146,6 +154,8 @@ export default class List extends Vue {
   private roles: Role[] = []
   private roleIdList: number[] = []
   private editingUserId: number = 0
+
+  private updatingStatus: { [key: string]: boolean } = {}
 
   private created() {
     this.loadUsers()
@@ -189,9 +199,29 @@ export default class List extends Vue {
     if (Number.parseInt(code)) {
       this.$message.error(`更新角色出错, 请联系管理员. 出错信息: ${mesg}`)
     }
+    this.dialogVisible = false
   }
 
-  private async handleForbidUser(user: any) {}
+  private async toggleUserEnable(user: User) {
+    this.$set(this.updatingStatus, user.id, true)
+    this.editingUserId = user.id
+    try {
+      const {
+        data: { code, mesg }
+      } =
+        user.status === 'DISABLE'
+          ? await forbidUser(user.id)
+          : await enableUser(user.id)
+      if (Number.parseInt(code)) {
+        throw new Error(mesg)
+      }
+    } catch (error) {
+      this.$message.error(`禁用/启用用户失败, 请联系管理员. 错误信息: ${error}`)
+      user.status = user.status === 'DISABLE' ? 'ENABLE' : 'DISABLE'
+    } finally {
+      this.$set(this.updatingStatus, user.id, false)
+    }
+  }
 
   private handleQuery() {
     this.reloadData()
