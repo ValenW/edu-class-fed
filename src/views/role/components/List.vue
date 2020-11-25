@@ -22,12 +22,12 @@
         </el-form-item>
       </el-form>
 
-      <el-table :data="roles" style="width: 100%" v-loading="loading">
+      <el-table :data="roles" v-loading="loading">
         <el-table-column prop="id" label="编号" />
         <el-table-column prop="name" label="角色名称" />
         <el-table-column prop="description" label="描述" />
         <el-table-column prop="createdTime" label="添加时间" />
-        <el-table-column label="操作" align="center" width="150px">
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <div>
               <el-button
@@ -93,13 +93,7 @@
 <script lang="ts">
 import { Form } from 'element-ui'
 import { Vue, Component, Prop } from 'vue-property-decorator'
-
-type Role = {}
-type RoleQueryParam = {
-  current?: number
-  size?: number
-  name?: string
-}
+import { getByPage, Role, RoleQueryParam } from '@/services/role'
 
 @Component({
   components: {}
@@ -116,14 +110,18 @@ export default class RoleList extends Vue {
   private isEdit: boolean = false
 
   private created() {
-    // this.loadRoles()
+    this.loadRoles()
   }
 
   private async loadRoles() {
-    // this.loading = true
-    // const { data } = await getRoles(this.form)
-    // this.roles = data.data.records
-    // this.loading = false
+    this.loading = true
+    const {
+      data: {
+        data: { records }
+      }
+    } = await getByPage(this.form)
+    this.roles = records
+    this.loading = false
   }
 
   private onSubmit() {
