@@ -27,7 +27,12 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { Tree } from 'element-ui'
 import { TreeData } from 'element-ui/types/tree'
-import { getByRole, getWithStructure, Menu } from '@/services/menu'
+import {
+  assignMenuToRole,
+  getByRole,
+  getWithStructure,
+  Menu
+} from '@/services/menu'
 
 @Component({
   components: {}
@@ -63,12 +68,17 @@ export default class AssignMenu extends Vue {
     this.menusByRole = menusByRole
   }
 
-  private onSave() {
-    console.log('onSave')
+  private async onSave() {
+    const {
+      data: { code, mesg }
+    } = await assignMenuToRole(this.$refs.tree.getCheckedKeys(), this.roleId)
+    if (Number.parseInt(code)) {
+      this.$message.error(`更新菜单失败, 请联系管理员. 错误信息: ${mesg}`)
+    }
   }
 
   private onReset() {
-    console.log('onReset')
+    this.$refs.tree.setCheckedKeys([])
   }
 
   private get selectedKeys(): number[] {

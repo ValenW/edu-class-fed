@@ -67,3 +67,13 @@ export const getByRole = (roleId: string | number) =>
     url: '/getRoleMenus',
     params: { roleId }
   })
+
+export const assignMenuToRole = (
+  menuIdList: number[],
+  roleId: number | string
+) =>
+  menuRequest({
+    url: '/allocateRoleMenus',
+    method: 'POST',
+    data: { menuIdList, roleId }
+  })
