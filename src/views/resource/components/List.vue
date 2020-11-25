@@ -24,7 +24,11 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit" :disabled="isLoading">
+            <el-button
+              type="primary"
+              @click="reloadResource"
+              :disabled="isLoading"
+            >
               查询搜索
             </el-button>
             <el-button @click="onReset" :disabled="isLoading">重置</el-button>
@@ -58,14 +62,9 @@
         </el-table-column>
       </el-table>
 
-      <!--
-        total 总记录数
-        page-size 每页大小
-        分页组件会自动根据 total 和 page-size 计算出一共分多少页
-       -->
       <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
+        @size-change="onSizeChange"
+        @current-change="onCurrentChange"
         :disabled="isLoading"
         :current-page.sync="form.current"
         :page-sizes="[5, 10, 20]"
@@ -81,7 +80,13 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { Form } from 'element-ui'
-import { getByPage, ResourceQueryParam } from '@/services/resource'
+import {
+  getAllCategory,
+  getByPage,
+  Resource,
+  ResourceCategory,
+  ResourceQueryParam
+} from '@/services/resource'
 
 @Component
 export default class ResourceList extends Vue {
@@ -89,19 +94,24 @@ export default class ResourceList extends Vue {
     form: Form
   }
 
-  private resources: any[] = [] // 资源列表
+  private resources: Resource[] = []
+  private resourceCategories: ResourceCategory[] = []
   private form: ResourceQueryParam = {}
   private totalCount: number = 0
-  private resourceCategories: any[] = [] // 资源分类列表
-  private isLoading: boolean = true // 加载状态
+  private isLoading: boolean = true
 
   private created() {
-    this.loadResources()
-    // this.loadResourceCategories()
+    this.reloadResource()
+    this.loadResourceCategories()
+  }
+
+  private async reloadResource(current: number = 1) {
+    this.form.current = current
+    return this.loadResources()
   }
 
   private async loadResources() {
-    this.isLoading = true // 展示加载中状态
+    this.isLoading = true
 
     const {
       data: {
@@ -112,17 +122,14 @@ export default class ResourceList extends Vue {
     this.resources = records
     this.totalCount = total
 
-    this.isLoading = false // 关闭加载中状态
+    this.isLoading = false
   }
 
-  // private async loadResourceCategories() {
-  //   const { data } = await getResourceCategories()
-  //   this.resourceCategories = data.data
-  // }
-
-  private onSubmit() {
-    // this.form.current = 1 // 筛选查询从第 1 页开始
-    // this.loadResources()
+  private async loadResourceCategories() {
+    const {
+      data: { data }
+    } = await getAllCategory()
+    this.resourceCategories = data
   }
 
   private handleEdit(item: any) {
@@ -133,22 +140,18 @@ export default class ResourceList extends Vue {
     console.log('handleDelete', item)
   }
 
-  private handleSizeChange(val: number) {
-    // this.form.size = val
-    // this.form.current = 1 // 每页大小改变重新查询第1页数据
-    // this.loadResources()
-  }
-
-  private handleCurrentChange(val: number) {
-    // 请求获取对应页码的数据
-    // this.form.current = val // 修改要查询的页码
-    // this.loadResources()
-  }
-
   private onReset() {
-    // this.$refs.form.resetFields()
-    // this.form.current = 1 // 重置回到第1页
-    // this.loadResources()
+    this.$refs.form.resetFields()
+    this.reloadResource()
+  }
+
+  private onSizeChange(val: number) {
+    this.form.size = val
+    this.reloadResource()
+  }
+
+  private onCurrentChange(val: number) {
+    this.reloadResource(val)
   }
 }
 </script>
