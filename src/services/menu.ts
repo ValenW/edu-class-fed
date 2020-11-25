@@ -56,3 +56,14 @@ export const deleteMenu = (id: number) =>
     method: 'DELETE',
     url: `/${id}`
   })
+
+export const getWithStructure = () =>
+  menuRequest({
+    url: '/getMenuNodeList'
+  })
+
+export const getByRole = (roleId: string | number) =>
+  menuRequest({
+    url: '/getRoleMenus',
+    params: { roleId }
+  })
