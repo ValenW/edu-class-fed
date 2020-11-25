@@ -1,11 +1,14 @@
 <template>
-  <div class="user">用户管理</div>
+  <List />
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import List from './components/List.vue'
 
-@Component
+@Component({
+  components: { List }
+})
 export default class UserIndex extends Vue {}
 </script>
 
