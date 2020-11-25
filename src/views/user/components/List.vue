@@ -36,34 +36,28 @@
       <el-table-column prop="id" label="用户ID" width="100"> </el-table-column>
       <el-table-column prop="name" label="头像" width="80">
         <template slot-scope="scope">
-          <img
-            width="30px"
-            :src="
-              scope.row.portrait ||
-                'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'
-            "
-          />
+          <img width="30px" :src="scope.row.portrait || defaultAvatarUrl" />
         </template>
       </el-table-column>
       <el-table-column prop="name" label="用户名" />
       <el-table-column prop="phone" label="手机号" />
       <el-table-column prop="createTime" label="注册时间" />
       <el-table-column prop="name" label="状态">
-        <template slot-scope="scope">
+        <template slot-scope="{ row }">
           <el-switch
-            v-model="scope.row.status"
+            v-model="row.status"
             active-value="ENABLE"
             inactive-value="DISABLE"
             active-color="#13ce66"
             inactive-color="#ff4949"
-            @change="handleForbidUser(scope.row)"
+            @change="handleForbidUser(row)"
           >
           </el-switch>
         </template>
       </el-table-column>
       <el-table-column prop="address" label="操作">
-        <template slot-scope="scope">
-          <el-button type="text" @click="handleSelectRole(scope.row)">
+        <template slot-scope="{ row }">
+          <el-button type="text" @click="handleSelectRole(row)">
             分配角色
           </el-button>
         </template>
@@ -82,8 +76,15 @@
     >
     </el-pagination>
 
-    <el-dialog title="分配角色" :visible.sync="dialogVisible" width="50%">
-      <el-select v-model="roleIdList" multiple placeholder="请选择">
+    <el-dialog title="分配角色" :visible.sync="dialogVisible" width="400px">
+      <el-select
+        v-model="roleIdList"
+        multiple
+        clearable
+        size="medium"
+        placeholder="请选择"
+        width="100%"
+      >
         <el-option
           v-for="item in roles"
           :key="item.id"
@@ -94,7 +95,7 @@
       </el-select>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="handleAllocRole">确定</el-button>
+        <el-button type="primary" @click="handleAssignRole">确定</el-button>
       </span>
     </el-dialog>
   </el-card>
@@ -102,7 +103,7 @@
 
 <script lang="ts">
 import { getByPage, User, UserQueryParam } from '@/services/user'
-import { Role } from '@/services/role'
+import { assignRolesToUser, getAll, getUserRole, Role } from '@/services/role'
 import { safeDate } from '@/utils'
 import { Form } from 'element-ui'
 import { Vue, Component, Prop } from 'vue-property-decorator'
@@ -114,6 +115,11 @@ export default class List extends Vue {
   $refs!: {
     form: Form
   }
+
+  private defaultAvatarUrl =
+    'https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png'
+  private loading: boolean = false
+  private total: number = 0
   private users: User[] = []
   private form: UserQueryParam & { dateRange: [string, string] } = {
     pageSize: 10,
@@ -136,15 +142,14 @@ export default class List extends Vue {
     }
   }
 
-  private loading: boolean = false
   private dialogVisible: boolean = false
   private roles: Role[] = []
   private roleIdList: number[] = []
-  private currentUser?: User // 分配角色的当前用户
-  private total: number = 0
+  private editingUserId: number = 0
 
   private created() {
     this.loadUsers()
+    this.loadRoles()
   }
 
   private async loadUsers() {
@@ -161,6 +166,31 @@ export default class List extends Vue {
     this.loading = false
   }
 
+  private async loadRoles() {
+    const {
+      data: { data: roles }
+    } = await getAll()
+    this.roles = roles
+  }
+
+  private async handleSelectRole(user: User) {
+    this.editingUserId = user.id
+    const {
+      data: { data: roleIds }
+    } = await getUserRole(user.id)
+    this.roleIdList = roleIds.map((r: Role) => r.id)
+    this.dialogVisible = true
+  }
+
+  private async handleAssignRole() {
+    const {
+      data: { code, mesg }
+    } = await assignRolesToUser(this.editingUserId, this.roleIdList)
+    if (Number.parseInt(code)) {
+      this.$message.error(`更新角色出错, 请联系管理员. 出错信息: ${mesg}`)
+    }
+  }
+
   private async handleForbidUser(user: any) {}
 
   private handleQuery() {
@@ -171,10 +201,6 @@ export default class List extends Vue {
     this.$refs.form.resetFields()
     this.reloadData()
   }
-
-  private async handleSelectRole(role: any) {}
-
-  private async handleAllocRole() {}
 
   private onSizeChange(val: number) {
     this.form.pageSize = val

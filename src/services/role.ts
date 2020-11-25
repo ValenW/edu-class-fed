@@ -31,3 +31,20 @@ export const getByPage = (data: RoleQueryParam) =>
     method: 'POST',
     data
   })
+
+export const getAll = () =>
+  roleRequest({
+    url: '/all'
+  })
+
+export const getUserRole = (userId: number | string) =>
+  roleRequest({
+    url: `/user/${userId}`
+  })
+
+export const assignRolesToUser = (userId: number, roleIdList: number[]) =>
+  roleRequest({
+    url: 'allocateUserRoles',
+    method: 'POST',
+    data: { userId, roleIdList }
+  })
