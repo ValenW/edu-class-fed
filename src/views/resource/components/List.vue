@@ -26,7 +26,7 @@
           <el-form-item>
             <el-button
               type="primary"
-              @click="reloadResource"
+              @click="() => reloadResource()"
               :disabled="isLoading"
             >
               查询搜索
@@ -36,31 +36,7 @@
         </el-form>
       </div>
 
-      <el-table
-        :data="resources"
-        style="width: 100%; margin-bottom: 20px"
-        v-loading="isLoading"
-      >
-        <el-table-column type="index" label="编号"> </el-table-column>
-        <el-table-column prop="name" label="资源名称"> </el-table-column>
-        <el-table-column prop="url" label="资源路径"> </el-table-column>
-        <el-table-column prop="description" label="描述"> </el-table-column>
-        <el-table-column prop="createdTime" label="添加时间"> </el-table-column>
-        <el-table-column label="操作">
-          <template slot-scope="scope">
-            <el-button size="mini" @click="handleEdit(scope.row)">
-              编辑
-            </el-button>
-            <el-button
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.row)"
-            >
-              删除
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+      <Table :isLoading="isLoading" :resources="resources" />
 
       <el-pagination
         @size-change="onSizeChange"
@@ -80,6 +56,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { Form } from 'element-ui'
+import Table from './Table.vue'
 import {
   getAllCategory,
   getByPage,
@@ -88,7 +65,9 @@ import {
   ResourceQueryParam
 } from '@/services/resource'
 
-@Component
+@Component({
+  components: { Table }
+})
 export default class ResourceList extends Vue {
   $refs!: {
     form: Form
@@ -130,14 +109,6 @@ export default class ResourceList extends Vue {
       data: { data }
     } = await getAllCategory()
     this.resourceCategories = data
-  }
-
-  private handleEdit(item: any) {
-    console.log('handleEdit', item)
-  }
-
-  private handleDelete(item: any) {
-    console.log('handleDelete', item)
   }
 
   private onReset() {
