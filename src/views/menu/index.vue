@@ -1,9 +1,17 @@
 <template>
   <el-card class="menu">
     <div slot="header" class="clearfix">
-      <el-button @click="() => $router.push({ name: 'menu-create' })">
-        新建菜单
-      </el-button>
+      <el-row type="flex" justify="space-between">
+        菜单管理
+        <div class="operations">
+          <el-button
+            size="mini"
+            @click="() => $router.push({ name: 'menu-create' })"
+          >
+            新建菜单
+          </el-button>
+        </div>
+      </el-row>
     </div>
 
     <el-table :data="menus" style="width: 100%">

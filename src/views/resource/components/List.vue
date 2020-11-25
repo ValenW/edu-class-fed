@@ -2,15 +2,17 @@
   <div class="resource-list">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        资源管理
-        <div class="operations" style="float: right">
-          <el-button size="mini">
-            添加资源
-          </el-button>
-          <el-button size="mini">
-            资源分类
-          </el-button>
-        </div>
+        <el-row type="flex" justify="space-between">
+          资源管理
+          <div class="operations">
+            <el-button size="mini">
+              添加资源
+            </el-button>
+            <el-button size="mini">
+              资源分类
+            </el-button>
+          </div>
+        </el-row>
       </div>
 
       <el-form inline ref="form" :model="form">
@@ -45,6 +47,7 @@
           <el-button @click="onReset" :disabled="isLoading">重置</el-button>
         </el-form-item>
       </el-form>
+
       <Table :isLoading="isLoading" :resources="resources" />
 
       <el-pagination
