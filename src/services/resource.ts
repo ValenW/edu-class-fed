@@ -36,6 +36,7 @@ export type ResourceCategory = {
   name: string
   sort: number
   selected: boolean
+  resourceList?: Resource[]
 }
 
 export const getByPage = (data: ResourceQueryParam) =>
@@ -48,4 +49,25 @@ export const getByPage = (data: ResourceQueryParam) =>
 export const getAllCategory = () =>
   resourceRequest({
     url: '/category/getAll'
+  })
+
+export const getAllResource = () =>
+  resourceRequest({
+    url: '/getAll'
+  })
+
+export const getByRole = (roleId: string | number) =>
+  resourceRequest({
+    url: '/getRoleResources',
+    params: { roleId }
+  })
+
+export const assignResourceToRole = (
+  resourceIdList: number[],
+  roleId: number | string
+) =>
+  resourceRequest({
+    url: '/allocateRoleResources',
+    method: 'POST',
+    data: { resourceIdList, roleId }
   })
