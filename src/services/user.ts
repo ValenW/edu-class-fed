@@ -2,16 +2,42 @@ import { buildRequestWithBaseUrl } from '../utils/request'
 import qs from 'qs'
 import axios from 'axios'
 
-interface User {
+interface RegisterInfo {
   phone: string
   password: string
 }
+export interface User {
+  id: number
+  name: string
+  portrait: string
+  phone: string
+  password: string
+  regIp: string
+  accountNonExpired: boolean
+  credentialsNonExpired: boolean
+  accountNonLocked: boolean
+  status: string
+  isDel: boolean
+  createTime: string
+  updateTime: string
+}
 
-const basePath = '/front/user'
-const userRequest = buildRequestWithBaseUrl(basePath)
+export type UserQueryParam = {
+  currentPage?: number
+  pageSize?: number
+  phone?: string
+  userId?: number
+  startCreateTime?: Date
+  endCreateTime?: Date
+}
 
-export const login = (data: User) =>
-  userRequest({
+const authPath = '/front/user'
+const authRequest = buildRequestWithBaseUrl(authPath)
+const userPath = '/boss/user'
+const userRequest = buildRequestWithBaseUrl(userPath)
+
+export const login = (data: RegisterInfo) =>
+  authRequest({
     method: 'POST',
     url: `/login`,
     headers: {
@@ -21,7 +47,7 @@ export const login = (data: User) =>
   })
 
 export const userInfo = () =>
-  userRequest({
+  authRequest({
     method: 'GET',
     url: `/getInfo`
   })
@@ -30,7 +56,21 @@ export const refreshToken = (refreshToken: string) => {
   // not use request to avoid response interceptors
   return axios.create()({
     method: 'POST',
-    url: `${basePath}/refresh_token`,
+    url: `${authPath}/refresh_token`,
     data: qs.stringify({ refreshtoken: refreshToken })
   })
 }
+
+export const getByPage = (data: UserQueryParam) =>
+  userRequest({
+    url: '/getUserPages',
+    method: 'POST',
+    data: {
+      ...data,
+      startCreateTime:
+        (data.startCreateTime && data.startCreateTime.toISOString()) ||
+        undefined,
+      endCreateTime:
+        (data.endCreateTime && data.endCreateTime.toISOString()) || undefined
+    }
+  })

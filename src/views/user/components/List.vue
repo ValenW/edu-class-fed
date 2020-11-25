@@ -43,16 +43,10 @@
           />
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="用户名" width="120">
-      </el-table-column>
-      <el-table-column prop="phone" label="手机号" width="120">
-      </el-table-column>
-      <el-table-column prop="createTime" label="注册时间" width="120">
-      </el-table-column>
-      <!-- <el-table-column
-        prop="name"
-        label="状态"
-        width="80">
+      <el-table-column prop="name" label="用户名" />
+      <el-table-column prop="phone" label="手机号" />
+      <el-table-column prop="createTime" label="注册时间" />
+      <el-table-column prop="name" label="状态">
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.status"
@@ -64,7 +58,7 @@
           >
           </el-switch>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column prop="address" label="操作">
         <template slot-scope="scope">
           <el-button type="text" @click="handleSelectRole(scope.row)">
@@ -105,19 +99,10 @@
 </template>
 
 <script lang="ts">
+import { getByPage, User, UserQueryParam } from '@/services/user'
 import { Role } from '@/services/role'
 import { Form } from 'element-ui'
 import { Vue, Component, Prop } from 'vue-property-decorator'
-
-type User = {}
-type UserQueryParam = {
-  currentPage?: number
-  pageSize?: number
-  phone?: string
-  startCreateTime?: string
-  endCreateTime?: string
-  rangeDate?: [Date, Date]
-}
 
 @Component({
   components: {}
@@ -139,7 +124,19 @@ export default class List extends Vue {
     this.loadUsers()
   }
 
-  private async loadUsers() {}
+  private async loadUsers() {
+    this.loading = true
+
+    const {
+      data: {
+        data: { records: users, total }
+      }
+    } = await getByPage(this.form)
+    this.users = users
+    this.total = total
+
+    this.loading = false
+  }
 
   private async handleForbidUser(user: any) {}
 
@@ -161,7 +158,7 @@ export default class List extends Vue {
   }
 
   private reloadData(current: number = 1) {
-    this.form.currentPage = 1
+    this.form.currentPage = current
     this.loadUsers()
   }
 }
