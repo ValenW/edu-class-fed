@@ -40,11 +40,14 @@ export default class Table extends Vue {
   private loading!: boolean
 
   private handleMenu(item: Role) {
-    console.log('handleMenu', item)
+    this.$router.push({ name: 'assign-menu', params: { roleId: `${item.id}` } })
   }
 
   private handleResource(item: Role) {
-    console.log('handleResource', item)
+    this.$router.push({
+      name: 'assign-resource',
+      params: { roleId: `${item.id}` }
+    })
   }
 
   private handleEdit(item: Role) {

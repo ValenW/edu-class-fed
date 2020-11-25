@@ -92,36 +92,6 @@ export default class RoleList extends Vue {
     this.loading = false
   }
 
-  private onSubmit() {
-    this.loadRoles()
-  }
-
-  private handleEdit(role: any) {
-    // this.dialogVisible = true
-    // this.roleId = role.id
-    // this.isEdit = true
-  }
-
-  private async handleDelete(role: any) {
-    // try {
-    //   await this.$confirm(`确认删除角色：${role.name}？`, '删除提示')
-    //   await deleteRole(role.id)
-    //   this.$message.success('删除成功')
-    //   this.loadRoles()
-    // } catch (err) {
-    //   if (err && err.response) {
-    //     this.$message.error('删除失败，请重试')
-    //   } else {
-    //     this.$message.info('取消删除')
-    //   }
-    // }
-  }
-
-  private onReset() {
-    // this.$refs.form.resetFields()
-    // this.loadRoles()
-  }
-
   private onSuccess() {
     // this.dialogVisible = false
     // this.loadRoles()
@@ -130,6 +100,15 @@ export default class RoleList extends Vue {
   private handleAdd() {
     // this.isEdit = false
     // this.dialogVisible = true
+  }
+
+  private onSubmit() {
+    this.loadRoles()
+  }
+
+  private onReset() {
+    this.$refs.form.resetFields()
+    this.loadRoles()
   }
 
   private onSizeChange(val: number) {

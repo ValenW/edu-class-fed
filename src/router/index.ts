@@ -82,6 +82,24 @@ const routes: RouteConfig[] = [
           import(/* webpackChunkName: 'role' */ '@/views/role/index.vue')
       },
       {
+        name: 'assign-menu',
+        path: '/role/:roleId/assign-menu',
+        component: () =>
+          import(
+            /* webpackChunkName: 'assign-menu' */ '@/views/role/assign-menu.vue'
+          ),
+        props: true
+      },
+      {
+        name: 'assign-resource',
+        path: '/role/:roleId/assign-resource',
+        component: () =>
+          import(
+            /* webpackChunkName: 'assign-resource' */ '@/views/role/assign-resource.vue'
+          ),
+        props: true
+      },
+      {
         name: 'user',
         path: '/user',
         component: () =>
