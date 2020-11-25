@@ -2,40 +2,49 @@
   <div class="resource-list">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <el-form ref="form" :model="form" label-width="80px">
-          <el-form-item prop="name" label="资源名称">
-            <el-input v-model="form.name"></el-input>
-          </el-form-item>
-          <el-form-item prop="url" label="资源路径">
-            <el-input v-model="form.url"></el-input>
-          </el-form-item>
-          <el-form-item prop="categoryId" label="资源分类">
-            <el-select
-              v-model="form.categoryId"
-              placeholder="请选择资源分类"
-              clearable
-            >
-              <el-option
-                :label="item.name"
-                :value="item.id"
-                v-for="item in resourceCategories"
-                :key="item.id"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button
-              type="primary"
-              @click="() => reloadResource()"
-              :disabled="isLoading"
-            >
-              查询搜索
-            </el-button>
-            <el-button @click="onReset" :disabled="isLoading">重置</el-button>
-          </el-form-item>
-        </el-form>
+        资源管理
+        <div class="operations" style="float: right">
+          <el-button size="mini">
+            添加资源
+          </el-button>
+          <el-button size="mini">
+            资源分类
+          </el-button>
+        </div>
       </div>
 
+      <el-form inline ref="form" :model="form">
+        <el-form-item prop="name" label="资源名称">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
+        <el-form-item prop="url" label="资源路径">
+          <el-input v-model="form.url"></el-input>
+        </el-form-item>
+        <el-form-item prop="categoryId" label="资源分类">
+          <el-select
+            v-model="form.categoryId"
+            placeholder="请选择资源分类"
+            clearable
+          >
+            <el-option
+              :label="item.name"
+              :value="item.id"
+              v-for="item in resourceCategories"
+              :key="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            @click="() => reloadResource()"
+            :disabled="isLoading"
+          >
+            查询搜索
+          </el-button>
+          <el-button @click="onReset" :disabled="isLoading">重置</el-button>
+        </el-form-item>
+      </el-form>
       <Table :isLoading="isLoading" :resources="resources" />
 
       <el-pagination
