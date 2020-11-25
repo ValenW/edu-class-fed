@@ -23,6 +23,18 @@
       </el-form>
 
       <Table :roles="roles" :loading="loading" />
+
+      <el-pagination
+        @size-change="onSizeChange"
+        @current-change="onCurrentChange"
+        :disabled="loading"
+        :current-page.sync="form.current"
+        :page-sizes="[5, 10, 20]"
+        :page-size="form.size"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      >
+      </el-pagination>
     </el-card>
 
     <el-dialog
@@ -56,14 +68,13 @@ export default class RoleList extends Vue {
   }
   private roles: Role[] = []
   private form: RoleQueryParam = {
-    current: 1,
-    size: 50,
     name: ''
   }
   private roleId?: number
   private loading: boolean = false
   private dialogVisible: boolean = false
   private isEdit: boolean = false
+  private total: number = 0
 
   private created() {
     this.loadRoles()
@@ -73,10 +84,11 @@ export default class RoleList extends Vue {
     this.loading = true
     const {
       data: {
-        data: { records }
+        data: { records, total }
       }
     } = await getByPage(this.form)
     this.roles = records
+    this.total = total
     this.loading = false
   }
 
@@ -118,6 +130,20 @@ export default class RoleList extends Vue {
   private handleAdd() {
     // this.isEdit = false
     // this.dialogVisible = true
+  }
+
+  private onSizeChange(val: number) {
+    this.form.size = val
+    this.reloadData()
+  }
+
+  private onCurrentChange(val: number) {
+    this.reloadData(val)
+  }
+
+  private reloadData(current: number = 1) {
+    this.form.current = current
+    this.loadRoles()
   }
 }
 </script>

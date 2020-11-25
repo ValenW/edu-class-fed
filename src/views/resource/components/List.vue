@@ -40,25 +40,25 @@
           <el-button
             type="primary"
             @click="() => reloadResource()"
-            :disabled="isLoading"
+            :disabled="loading"
           >
             查询搜索
           </el-button>
-          <el-button @click="onReset" :disabled="isLoading">重置</el-button>
+          <el-button @click="onReset" :disabled="loading">重置</el-button>
         </el-form-item>
       </el-form>
 
-      <Table :isLoading="isLoading" :resources="resources" />
+      <Table :loading="loading" :resources="resources" />
 
       <el-pagination
         @size-change="onSizeChange"
         @current-change="onCurrentChange"
-        :disabled="isLoading"
+        :disabled="loading"
         :current-page.sync="form.current"
         :page-sizes="[5, 10, 20]"
         :page-size="form.size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="totalCount"
+        :total="total"
       >
       </el-pagination>
     </el-card>
@@ -88,8 +88,8 @@ export default class ResourceList extends Vue {
   private resources: Resource[] = []
   private resourceCategories: ResourceCategory[] = []
   private form: ResourceQueryParam = {}
-  private totalCount: number = 0
-  private isLoading: boolean = true
+  private total: number = 0
+  private loading: boolean = true
 
   private created() {
     this.reloadResource()
@@ -102,7 +102,7 @@ export default class ResourceList extends Vue {
   }
 
   private async loadResources() {
-    this.isLoading = true
+    this.loading = true
 
     const {
       data: {
@@ -111,9 +111,9 @@ export default class ResourceList extends Vue {
     } = await getByPage(this.form)
 
     this.resources = records
-    this.totalCount = total
+    this.total = total
 
-    this.isLoading = false
+    this.loading = false
   }
 
   private async loadResourceCategories() {
