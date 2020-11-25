@@ -22,56 +22,7 @@
         </el-form-item>
       </el-form>
 
-      <el-table :data="roles" v-loading="loading">
-        <el-table-column prop="id" label="编号" />
-        <el-table-column prop="name" label="角色名称" />
-        <el-table-column prop="description" label="描述" />
-        <el-table-column prop="createdTime" label="添加时间" />
-        <el-table-column label="操作" align="center">
-          <template slot-scope="scope">
-            <div>
-              <el-button
-                type="text"
-                @click="
-                  $router.push({
-                    name: 'alloc-menu',
-                    params: {
-                      roleId: scope.row.id
-                    }
-                  })
-                "
-              >
-                分配菜单
-              </el-button>
-              <el-button
-                type="text"
-                @click="
-                  $router.push({
-                    name: 'alloc-resource',
-                    params: {
-                      roleId: scope.row.id
-                    }
-                  })
-                "
-              >
-                分配资源
-              </el-button>
-            </div>
-            <div>
-              <el-button type="text" @click="handleEdit(scope.row)">
-                编辑
-              </el-button>
-              <el-button
-                size="mini"
-                type="text"
-                @click="handleDelete(scope.row)"
-              >
-                删除
-              </el-button>
-            </div>
-          </template>
-        </el-table-column>
-      </el-table>
+      <Table :roles="roles" :loading="loading" />
     </el-card>
 
     <el-dialog
@@ -91,19 +42,24 @@
 </template>
 
 <script lang="ts">
+import Table from './Table.vue'
+import { getByPage, Role, RoleQueryParam } from '@/services/role'
 import { Form } from 'element-ui'
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { getByPage, Role, RoleQueryParam } from '@/services/role'
 
 @Component({
-  components: {}
+  components: { Table }
 })
 export default class RoleList extends Vue {
   $refs!: {
     form: Form
   }
   private roles: Role[] = []
-  private form: RoleQueryParam = {}
+  private form: RoleQueryParam = {
+    current: 1,
+    size: 50,
+    name: ''
+  }
   private roleId?: number
   private loading: boolean = false
   private dialogVisible: boolean = false

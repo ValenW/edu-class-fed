@@ -2,7 +2,7 @@
   <el-table
     :data="resources"
     style="width: 100%; margin-bottom: 20px"
-    v-loading="isLoading"
+    v-loading="loading"
   >
     <el-table-column type="index" label="编号"> </el-table-column>
     <el-table-column prop="name" label="资源名称"> </el-table-column>
@@ -10,11 +10,11 @@
     <el-table-column prop="description" label="描述"> </el-table-column>
     <el-table-column prop="createdTime" label="添加时间"> </el-table-column>
     <el-table-column label="操作">
-      <template slot-scope="item">
-        <el-button size="mini" @click="handleEdit(item.row)">
+      <template slot-scope="{ row }">
+        <el-button size="mini" @click="handleEdit(row)">
           编辑
         </el-button>
-        <el-button size="mini" type="danger" @click="handleDelete(item.row)">
+        <el-button size="mini" type="danger" @click="handleDelete(row)">
           删除
         </el-button>
       </template>
@@ -32,7 +32,7 @@ export default class Table extends Vue {
   private resources!: Resource[]
 
   @Prop({ type: Boolean, default: false })
-  private isLoading!: boolean
+  private loading!: boolean
 
   private handleEdit(item: any) {
     console.log('handleEdit', item)
