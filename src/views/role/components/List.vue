@@ -2,19 +2,26 @@
   <div class="role-list">
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <el-form ref="form" :model="form">
-          <el-form-item label="角色名称" prop="name">
-            <el-input v-model="form.name"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit" :disabled="loading">
-              查询搜索
-            </el-button>
-            <el-button :disabled="loading" @click="onReset">重置</el-button>
-          </el-form-item>
-        </el-form>
+        <el-row type="flex" justify="space-between">
+          角色管理
+          <div class="operations">
+            <el-button size="mini" @click="handleAdd">添加角色</el-button>
+          </div>
+        </el-row>
       </div>
-      <el-button @click="handleAdd">添加角色</el-button>
+
+      <el-form ref="form" inline :model="form">
+        <el-form-item label="角色名称" prop="name">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit" :disabled="loading">
+            查询搜索
+          </el-button>
+          <el-button :disabled="loading" @click="onReset">重置</el-button>
+        </el-form-item>
+      </el-form>
+
       <el-table :data="roles" style="width: 100%" v-loading="loading">
         <el-table-column prop="id" label="编号" />
         <el-table-column prop="name" label="角色名称" />
