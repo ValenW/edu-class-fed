@@ -150,7 +150,9 @@ export default class List extends Vue {
   }
 
   private handleAdd() {
-    // TODO
+    this.$router.push({
+      name: 'course-create'
+    })
   }
 
   private async handleStateChange(course: Course) {
