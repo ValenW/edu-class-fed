@@ -43,8 +43,8 @@ export default class LoginIndex extends Vue {
   }
   private doingLogin = false
   private form = {
-    phone: '',
-    password: ''
+    phone: process.env.VUE_APP_USER,
+    password: process.env.VUE_APP_SECRET
   }
   private rules = {
     phone: [
@@ -55,6 +55,10 @@ export default class LoginIndex extends Vue {
       { required: true, message: '请输入密码', trigger: 'blur' },
       { min: 6, max: 18, message: '密码长度应为6到18', trigger: 'blur' }
     ]
+  }
+
+  private created() {
+    console.log(process.env)
   }
 
   async submit() {
