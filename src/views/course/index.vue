@@ -1,11 +1,14 @@
 <template>
-  <div class="course">课程管理</div>
+  <List />
 </template>
 
 <script lang="ts">
+import List from './component/List.vue'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
-@Component
+@Component({
+  components: { List }
+})
 export default class CourseIndex extends Vue {}
 </script>
 
