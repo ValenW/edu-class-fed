@@ -56,6 +56,15 @@ const routes: RouteConfig[] = [
           )
       },
       {
+        name: 'course-edit',
+        path: '/course-edit/:courseId',
+        component: () =>
+          import(
+            /* webpackChunkName: 'course-edit' */ '@/views/course/edit.vue'
+          ),
+        props: true
+      },
+      {
         name: 'menu',
         path: '/menu',
         component: () =>

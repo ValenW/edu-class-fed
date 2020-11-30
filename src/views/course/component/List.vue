@@ -1,21 +1,19 @@
 <template>
   <el-card>
-    <div slot="header">
-      <div slot="header" class="clearfix">
-        <el-row type="flex" justify="space-between">
-          用户管理
-          <div class="operations">
-            <el-button
-              type="primary"
-              size="mini"
-              icon="el-icon-plus"
-              @click="handleAdd"
-            >
-              新建课程
-            </el-button>
-          </div>
-        </el-row>
-      </div>
+    <div slot="header" class="clearfix">
+      <el-row type="flex" justify="space-between">
+        用户管理
+        <div class="operations">
+          <el-button
+            type="primary"
+            size="mini"
+            icon="el-icon-plus"
+            @click="handleAdd"
+          >
+            新建课程
+          </el-button>
+        </div>
+      </el-row>
     </div>
 
     <el-form
@@ -67,28 +65,10 @@
       </el-table-column>
       <el-table-column prop="price" label="操作" align="center">
         <template slot-scope="{ row }">
-          <el-button
-            @click="
-              $router.push({
-                name: 'course-edit',
-                params: {
-                  courseId: row.id
-                }
-              })
-            "
-          >
+          <el-button @click="handleEdit(row)">
             编辑
           </el-button>
-          <el-button
-            @click="
-              $router.push({
-                name: 'course-section',
-                params: {
-                  courseId: row.id
-                }
-              })
-            "
-          >
+          <el-button @click="handleManage(row)">
             内容管理
           </el-button>
         </template>
@@ -153,6 +133,24 @@ export default class List extends Vue {
     this.$router.push({
       name: 'course-create'
     })
+  }
+
+  private handleEdit(course: Course) {
+    this.$router.push({
+      name: 'course-edit',
+      params: {
+        courseId: `${course.id}`
+      }
+    })
+  }
+
+  private handleManage(course: Course) {
+    // this.$router.push({
+    //   name: 'course-section',
+    //   params: {
+    //     courseId: `${course.id}`
+    //   }
+    // })
   }
 
   private async handleStateChange(course: Course) {

@@ -2,11 +2,11 @@
   <el-card>
     <div slot="header" class="clearfix">
       <el-row type="flex" justify="space-between">
-        新建课程
+        编辑课程
         <div class="operations"></div>
       </el-row>
     </div>
-    <Update :create-mode="true" />
+    <Update :create-mode="false" :course-id="courseId" />
   </el-card>
 </template>
 
@@ -17,7 +17,10 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 @Component({
   components: { Update }
 })
-export default class CreateCourse extends Vue {}
+export default class EditCourse extends Vue {
+  @Prop({ required: true })
+  private courseId!: number
+}
 </script>
 
 <style scoped></style>
