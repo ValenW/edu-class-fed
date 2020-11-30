@@ -120,9 +120,7 @@ export default class List extends Vue {
   }
   private form: CourseQuery = {
     currentPage: 1,
-    pageSize: 20,
-    courseName: '',
-    status: ''
+    pageSize: 20
   }
   private courses: Course[] = []
   private total: number = 0
@@ -130,7 +128,7 @@ export default class List extends Vue {
   private courseLoading: Record<number, boolean> = {}
 
   private created() {
-    this.loadCourse()
+    this.reloadData()
   }
 
   private async reloadData(current: number = 1) {
