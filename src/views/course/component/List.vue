@@ -60,8 +60,8 @@
             inactive-color="#ff4949"
             :active-value="1"
             :inactive-value="0"
-            :disabled="row.isStatusLoading"
-            @change="onStateChange(row)"
+            :disabled="courseLoading[row.id]"
+            @change="handleStateChange(row)"
           />
         </template>
       </el-table-column>
@@ -107,7 +107,7 @@
 </template>
 
 <script lang="ts">
-import { Course, CourseQuery, getByPage } from '@/services/course'
+import { changeState, Course, CourseQuery, getByPage } from '@/services/course'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { Form } from 'element-ui'
 
@@ -127,6 +127,7 @@ export default class List extends Vue {
   private courses: Course[] = []
   private total: number = 0
   private loading: boolean = false
+  private courseLoading: Record<number, boolean> = {}
 
   private created() {
     this.loadCourse()
@@ -152,6 +153,23 @@ export default class List extends Vue {
 
   private handleAdd() {
     // TODO
+  }
+
+  private async handleStateChange(course: Course) {
+    this.$set(this.courseLoading, course.id, true)
+    try {
+      const {
+        data: { data, code, mesg }
+      } = await changeState(course.id, course.status)
+      if (Number.parseInt(code)) {
+        throw new Error(mesg)
+      }
+    } catch (error) {
+      this.$message.error(`Error when change state: ${error}`)
+      course.status = course.status ? 0 : 1
+    } finally {
+      this.$set(this.courseLoading, course.id, false)
+    }
   }
 
   private handleFilter() {
