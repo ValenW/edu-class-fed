@@ -1,0 +1,18 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "vetur.format.options.tabSize": 2,
+    "vetur.format.defaultFormatterOptions": {
+      "prettier": {}
+    },
+    "vetur.grammar.customBlocks": {
+      "docs": "md",
+      "i18n": "json"
+    },
+    "cSpell.words": ["clearfix", "daterange", "mesg", "refreshtoken"]
+  }
+}
