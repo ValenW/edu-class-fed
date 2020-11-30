@@ -57,10 +57,6 @@ export default class LoginIndex extends Vue {
     ]
   }
 
-  private created() {
-    console.log(process.env)
-  }
-
   async submit() {
     if (!(await this.validateForm())) {
       return
