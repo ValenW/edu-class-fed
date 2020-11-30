@@ -96,8 +96,10 @@
     </el-table>
     <el-pagination
       background
-      layout="prev, pager, next"
+      layout="total, sizes, prev, pager, next, jumper"
       :total="total"
+      :page-sizes="[5, 10, 20]"
+      :page-size="form.pageSize"
       :disabled="loading"
       @current-change="handleCurrentChange"
     />
@@ -136,11 +138,14 @@ export default class List extends Vue {
   }
 
   private async loadCourse() {
+    this.loading = true
     const {
       data: {
         data: { records, total }
       }
     } = await getByPage(this.form)
+    this.loading = false
+
     this.courses = records
     this.total = total
   }
@@ -149,17 +154,17 @@ export default class List extends Vue {
     // TODO
   }
 
-  private handleReset() {
-    this.$refs.form.resetFields()
-    this.reloadData()
-  }
-
   private handleFilter() {
     this.reloadData()
   }
 
   private handleCurrentChange(current: number) {
     this.reloadData(current)
+  }
+
+  private handleReset() {
+    this.$refs.form.resetFields()
+    this.reloadData()
   }
 }
 </script>
