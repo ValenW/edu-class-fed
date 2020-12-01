@@ -123,10 +123,7 @@
       </div>
       <div class="step-wrapper" v-show="activeStep === 4">
         <el-form-item label="课程详情">
-          <el-input
-            v-model="course.courseDescriptionMarkDown"
-            type="textarea"
-          ></el-input>
+          <TextEditor v-model="course.courseDescriptionMarkDown"/>
         </el-form-item>
         <el-form-item label="是否发布">
           <el-switch
@@ -152,11 +149,12 @@
 
 <script lang="ts">
 import Uploader from './Uploader.vue'
+import TextEditor from '@/component/TextEditor/index.vue'
 import { CourseInput, saveOrUpdate } from '@/services/course'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
 @Component({
-  components: { Uploader }
+  components: { Uploader, TextEditor }
 })
 export default class Update extends Vue {
   @Prop({ type: Boolean, required: true })

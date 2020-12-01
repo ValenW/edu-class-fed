@@ -13,6 +13,12 @@
       "docs": "md",
       "i18n": "json"
     },
-    "cSpell.words": ["clearfix", "daterange", "mesg", "refreshtoken"]
+    "cSpell.words": [
+      "clearfix",
+      "daterange",
+      "mesg",
+      "refreshtoken",
+      "wangeditor"
+    ]
   }
 }
