@@ -171,11 +171,7 @@ export default class Update extends Vue {
     { title: '课程详情', icon: 'el-icon-edit-outline' }
   ]
   private activeStep: number = 0
-  private course: Partial<CourseInput> = {
-    teacherDTO: {},
-    activityCourseDTO: {},
-    activityCourse: false
-  }
+  private course: Partial<CourseInput> = this.buildCourseInput({})
   private imageTypes: string[] = ['bmp', 'jpg', 'jpeg', 'png', 'gif']
 
   private mounted() {
@@ -192,10 +188,24 @@ export default class Update extends Vue {
       if (Number.parseInt(code)) {
         throw new Error(mesg)
       }
-      this.course = data
+
+      this.course = this.buildCourseInput(data)
     } catch (error) {
       this.$message.error(`加载课程信息出错: ${error}`)
     }
+  }
+
+  private buildCourseInput(course: Partial<CourseInput>): Partial<CourseInput> {
+    if (!course.activityCourseDTO) {
+      course.activityCourseDTO = {}
+    }
+    if (!course.teacherDTO) {
+      course.teacherDTO = {}
+    }
+    if (course.activityCourse === undefined) {
+      course.activityCourse = false
+    }
+    return course
   }
 
   private async handleSubmit() {
