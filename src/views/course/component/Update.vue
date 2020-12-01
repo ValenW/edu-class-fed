@@ -123,7 +123,7 @@
       </div>
       <div class="step-wrapper" v-show="activeStep === 4">
         <el-form-item label="课程详情">
-          <TextEditor v-model="course.courseDescriptionMarkDown"/>
+          <TextEditor v-model="course.courseDescriptionMarkDown" />
         </el-form-item>
         <el-form-item label="是否发布">
           <el-switch
@@ -173,7 +173,8 @@ export default class Update extends Vue {
   private activeStep: number = 0
   private course: Partial<CourseInput> = {
     teacherDTO: {},
-    activityCourseDTO: {}
+    activityCourseDTO: {},
+    activityCourse: false
   }
   private imageTypes: string[] = ['bmp', 'jpg', 'jpeg', 'png', 'gif']
 
