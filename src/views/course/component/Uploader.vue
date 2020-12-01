@@ -1,6 +1,5 @@
 <template>
   <el-upload
-    drag
     :accept="accept"
     class="uploader"
     action=""
@@ -75,14 +74,14 @@ export default class Uploader extends Vue {
 </script>
 
 <style scoped>
-::v-deep .uploader .el-upload {
+.uploader ::v-deep .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
   cursor: pointer;
   position: relative;
   overflow: hidden;
 }
-::v-deep .uploader .el-upload:hover {
+.uploader ::v-deep .el-upload:hover {
   border-color: #409eff;
 }
 .uploader-icon {
@@ -93,7 +92,7 @@ export default class Uploader extends Vue {
   line-height: 178px;
   text-align: center;
 }
-.avatar {
+.img {
   width: 178px;
   height: 178px;
   display: block;
