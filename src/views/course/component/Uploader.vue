@@ -1,19 +1,31 @@
 <template>
-  <el-upload
-    :accept="accept"
-    class="uploader"
-    action=""
-    :show-file-list="false"
-    :before-upload="beforeUpload"
-    :http-request="handleRequest"
-  >
-    <img v-if="value" :src="value" class="img" />
-    <i v-else class="el-icon-plus uploader-icon"></i>
-  </el-upload>
+  <div class="uploader">
+    <el-progress
+      v-show="uploading"
+      class="upload-progress"
+      type="circle"
+      :width="178"
+      :percentage="percentage"
+      :status="percentage === 100 ? 'success' : undefined"
+    />
+    <el-upload
+      v-show="!uploading"
+      :accept="accept"
+      class="uploader"
+      action=""
+      :show-file-list="false"
+      :before-upload="beforeUpload"
+      :http-request="handleRequest"
+    >
+      <img v-if="value" :src="value" class="img" />
+      <i v-else class="el-icon-plus uploader-icon"></i>
+    </el-upload>
+  </div>
 </template>
 
 <script lang="ts">
 import { uploadImage } from '@/services/course'
+import { Loading } from 'element-ui'
 import {
   ElUploadInternalRawFile,
   HttpRequestOptions
@@ -34,6 +46,7 @@ export default class Uploader extends Vue {
   private value!: string
 
   private uploading: boolean = false
+  private percentage: number = 0
 
   private beforeUpload(file: ElUploadInternalRawFile) {
     const isLt2M = file.size / 1024 / 1024 < this.limit
@@ -46,6 +59,7 @@ export default class Uploader extends Vue {
 
   private async handleRequest(options: HttpRequestOptions) {
     this.uploading = true
+    this.percentage = 0
     try {
       const fd = new FormData()
       fd.append('file', options.file)
@@ -55,7 +69,10 @@ export default class Uploader extends Vue {
           data: { code, mesg, name }
         },
         data: res
-      } = await uploadImage(fd)
+      } = await uploadImage(
+        fd,
+        e => (this.percentage = Math.floor((e.loaded / e.total) * 100))
+      )
       if (Number.parseInt(code)) {
         throw new Error('mesg')
       }

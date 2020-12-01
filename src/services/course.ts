@@ -118,9 +118,13 @@ export const saveOrUpdate = (data: Partial<CourseInput>) =>
     data
   })
 
-export const uploadImage = (data: FormData) =>
+export const uploadImage = (
+  data: FormData,
+  onUploadProgress?: (progressEvent: ProgressEvent) => void
+) =>
   courseRequest({
     url: '/upload',
     method: 'POST',
-    data
+    data,
+    onUploadProgress
   })
