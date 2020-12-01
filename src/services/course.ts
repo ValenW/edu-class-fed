@@ -99,7 +99,7 @@ export const getByPage = (data: CourseQuery) =>
 
 export const getById = (courseId: number | string) =>
   courseRequest({
-    url: 'getCourseById',
+    url: '/getCourseById',
     method: 'GET',
     params: { courseId }
   })

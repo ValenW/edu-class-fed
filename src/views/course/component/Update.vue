@@ -150,7 +150,7 @@
 <script lang="ts">
 import Uploader from './Uploader.vue'
 import TextEditor from '@/component/TextEditor/index.vue'
-import { CourseInput, saveOrUpdate } from '@/services/course'
+import { CourseInput, saveOrUpdate, getById } from '@/services/course'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
 @Component({
@@ -177,6 +177,26 @@ export default class Update extends Vue {
     activityCourse: false
   }
   private imageTypes: string[] = ['bmp', 'jpg', 'jpeg', 'png', 'gif']
+
+  private mounted() {
+    if (!this.createMode && this.courseId) {
+      this.loadData(this.courseId)
+    }
+  }
+
+  private async loadData(courseId: number) {
+    try {
+      const {
+        data: { code, mesg, data }
+      } = await getById(courseId)
+      if (Number.parseInt(code)) {
+        throw new Error(mesg)
+      }
+      this.course = data
+    } catch (error) {
+      this.$message.error(`加载课程信息出错: ${error}`)
+    }
+  }
 
   private async handleSubmit() {
     try {
