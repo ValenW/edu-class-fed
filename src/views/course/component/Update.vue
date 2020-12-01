@@ -43,32 +43,18 @@
       </div>
       <div class="step-wrapper" v-show="activeStep === 1">
         <el-form-item label="课程封面">
-          <el-upload
-            class="img-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :show-file-list="false"
-          >
-            <img
-              v-if="course.courseListImg"
-              :src="course.courseListImg"
-              class="img"
-            />
-            <i v-else class="el-icon-plus img-uploader-icon"></i>
-          </el-upload>
+          <Uploader
+            v-model="course.courseListImg"
+            :limit="2"
+            :acceptTypes="imageTypes"
+          />
         </el-form-item>
         <el-form-item label="介绍封面">
-          <el-upload
-            class="img-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :show-file-list="false"
-          >
-            <img
-              v-if="course.courseImgUrl"
-              :src="course.courseImgUrl"
-              class="img"
-            />
-            <i v-else class="el-icon-plus img-uploader-icon"></i>
-          </el-upload>
+          <Uploader
+            v-model="course.courseImgUrl"
+            :limit="2"
+            :acceptTypes="imageTypes"
+          />
         </el-form-item>
       </div>
       <div class="step-wrapper" v-show="activeStep === 2">
@@ -165,11 +151,12 @@
 </template>
 
 <script lang="ts">
+import Uploader from './Uploader.vue'
 import { CourseInput } from '@/services/course'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
 @Component({
-  components: {}
+  components: { Uploader }
 })
 export default class Update extends Vue {
   @Prop({ type: Boolean, required: true })
@@ -190,6 +177,7 @@ export default class Update extends Vue {
     teacherDTO: {},
     activityCourseDTO: {}
   }
+  private imageTypes: string[] = ['bmp', 'jpg', 'jpeg', 'png', 'gif']
 
   private handleSubmit() {
     // TODO
@@ -204,29 +192,5 @@ export default class Update extends Vue {
 <style scoped>
 .step-wrapper {
   margin-top: 10px;
-}
-
-::v-deep .img-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-::v-deep .img-uploader .el-upload:hover {
-  border-color: #409eff;
-}
-.img-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
-  text-align: center;
-}
-.avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
 }
 </style>

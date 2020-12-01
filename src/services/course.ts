@@ -117,3 +117,10 @@ export const saveOrUpdate = (data: Partial<CourseInput>) =>
     method: 'POST',
     data
   })
+
+export const uploadImage = (data: FormData) =>
+  courseRequest({
+    url: '/upload',
+    method: 'POST',
+    data
+  })
