@@ -152,7 +152,7 @@
 
 <script lang="ts">
 import Uploader from './Uploader.vue'
-import { CourseInput } from '@/services/course'
+import { CourseInput, saveOrUpdate } from '@/services/course'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
 @Component({
@@ -179,8 +179,21 @@ export default class Update extends Vue {
   }
   private imageTypes: string[] = ['bmp', 'jpg', 'jpeg', 'png', 'gif']
 
-  private handleSubmit() {
-    // TODO
+  private async handleSubmit() {
+    try {
+      const {
+        data: { code, mesg, data },
+        data: res
+      } = await saveOrUpdate(this.course)
+      console.log(res, data)
+
+      if (Number.parseInt(code)) {
+        throw new Error(mesg)
+      }
+      this.$router.push({ name: 'course' })
+    } catch (error) {
+      this.$message.error(`更新错误: ${error}`)
+    }
   }
 
   private get updateTitle(): string {
