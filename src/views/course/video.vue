@@ -1,5 +1,5 @@
-<template
-  ><el-card>
+<template>
+  <el-card>
     <div slot="header" class="clearfix">
       <el-row type="flex" justify="space-between">
         课时视频上传
@@ -16,10 +16,10 @@
           <el-input :value="lessonName" disabled required />
         </el-form-item>
         <el-form-item label="视频上传" required>
-          <input type="file" :accept="acceptVideo" />
+          <input type="file" ref="videoInput" :accept="acceptVideo" />
         </el-form-item>
         <el-form-item label="封面上传" required>
-          <input type="file" :accept="acceptImage" />
+          <input type="file" ref="imageInput" :accept="acceptImage" />
         </el-form-item>
 
         <el-form-item>
@@ -35,20 +35,26 @@
 import { getById } from '@/services/course'
 import { getLessonById } from '@/services/section'
 import { buildAcceptStr, ImageTypes, VideoTypes } from '@/utils'
+import { initUploader } from '@/utils/aliyun'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
 @Component({
   components: {}
 })
 export default class CourseVideo extends Vue {
+  $refs!: {
+    videoInput: HTMLInputElement
+    imageInput: HTMLInputElement
+  }
   @Prop({ type: String, required: true })
   private courseId!: string
 
   @Prop({ type: String, required: true })
   private lessonId!: string
 
-  private courseName: string = 'courseName'
-  private lessonName: string = 'lessonName'
+  private courseName: string = ''
+  private lessonName: string = ''
+  private uploader = initUploader()
 
   private async created() {
     const [
@@ -72,6 +78,15 @@ export default class CourseVideo extends Vue {
   }
 
   private onSubmit() {
+    const video = this.$refs.videoInput.files && this.$refs.videoInput.files[0]
+    const image = this.$refs.imageInput.files && this.$refs.imageInput.files[0]
+    if (!video || !image) {
+      this.$message.error('请选择视频和封面')
+      return
+    }
+
+    console.log(video, image)
+
     // TODO
   }
 
