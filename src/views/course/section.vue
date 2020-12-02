@@ -13,6 +13,7 @@
       node-key="id"
       draggable
       :allow-drop="allowDrop"
+      @node-drop="reorder"
     >
       <div class="node" slot-scope="{ node, data }">
         <span>{{ node.label }}</span>
@@ -47,8 +48,10 @@ import {
   CourseContent,
   getSectionAndLesson,
   Lesson,
-  Section
-} from '@/services/course-section'
+  Section,
+  updateLesson,
+  updateSection
+} from '@/services/section'
 import { Tree } from 'element-ui'
 import { TreeNode, TreeProps } from 'element-ui/types/tree'
 import { Vue, Component, Prop } from 'vue-property-decorator'
@@ -101,6 +104,32 @@ export default class CourseSection extends Vue {
       return draggingData.sectionId === dropData.id && type === 'inner'
     }
     return false
+  }
+
+  private async reorder(
+    dragNode: Node,
+    dropNode: Node,
+    type: 'prev' | 'inner' | 'next'
+  ) {
+    if (!dropNode.parent) {
+      console.log(dragNode)
+
+      return
+    }
+    const updateMethod = this.isLesson(dragNode.data)
+      ? updateLesson
+      : updateSection
+
+    try {
+      await Promise.all(
+        dropNode.parent.childNodes.map(({ data }, index) =>
+          updateMethod({ id: data.id, orderNum: index })
+        )
+      )
+      this.$message.success('排序成功')
+    } catch (error) {
+      this.$message.error(`排序失败: ${error}`)
+    }
   }
 
   private isLesson(data: any): data is Lesson {
