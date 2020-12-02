@@ -68,7 +68,7 @@
           <el-button @click="handleEdit(row)">
             编辑
           </el-button>
-          <el-button @click="handleManage(row)">
+          <el-button @click="handleSection(row)">
             内容管理
           </el-button>
         </template>
@@ -144,13 +144,13 @@ export default class List extends Vue {
     })
   }
 
-  private handleManage(course: Course) {
-    // this.$router.push({
-    //   name: 'course-section',
-    //   params: {
-    //     courseId: `${course.id}`
-    //   }
-    // })
+  private handleSection(course: Course) {
+    this.$router.push({
+      name: 'course-section',
+      params: {
+        courseId: `${course.id}`
+      }
+    })
   }
 
   private async handleStateChange(course: Course) {
