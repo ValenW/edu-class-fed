@@ -8,6 +8,26 @@
     </div>
 
     <el-tree :data="sections" :props="displayConfig" node-key="id" draggable>
+      <div class="node" slot-scope="{ node, data }">
+        <span>{{ node.label }}</span>
+
+        <span class="actions">
+          <template v-if="isLesson(data)">
+            <el-button>编辑</el-button>
+            <el-button type="success">上传视频</el-button>
+          </template>
+          <template v-else>
+            <el-button>编辑</el-button>
+            <el-button type="primary">添加课时</el-button>
+          </template>
+
+          <el-select class="select-status" placeholder="请选择">
+            <el-option label="已隐藏" :value="0" />
+            <el-option label="待更新" :value="1" />
+            <el-option label="已更新" :value="2" />
+          </el-select>
+        </span>
+      </div>
     </el-tree>
   </el-card>
 </template>
@@ -41,9 +61,9 @@ export default class CourseSection extends Vue {
   }
 
   private content: CourseContent | null = null
-  private displayConfig: TreeConfig<Section & Lesson> = {
+  private displayConfig: TreeConfig<Section> | TreeConfig<Lesson> = {
     children: 'courseLessons',
-    label: d => (typeof d.sectionId === 'number' ? d.theme : d.sectionName)
+    label: (d: Section | Lesson) => (this.isLesson(d) ? d.theme : d.sectionName)
   }
 
   private async created() {
@@ -53,6 +73,10 @@ export default class CourseSection extends Vue {
 
     this.content = content
     console.log(this.content)
+  }
+
+  private isLesson(data: any): data is Lesson {
+    return typeof data.sectionId === 'number'
   }
 
   private get courseName(): string {
@@ -65,4 +89,21 @@ export default class CourseSection extends Vue {
 }
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.node {
+  flex: 1;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ebeef5;
+  .select-status {
+    max-width: 100px;
+    margin-left: 8px;
+  }
+}
+
+::v-deep .el-tree-node__content {
+  height: auto;
+}
+</style>
