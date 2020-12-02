@@ -152,6 +152,7 @@ import Uploader from './Uploader.vue'
 import TextEditor from '@/component/TextEditor/index.vue'
 import { CourseInput, saveOrUpdate, getById } from '@/services/course'
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import { ImageTypes } from '@/utils'
 
 @Component({
   components: { Uploader, TextEditor }
@@ -172,7 +173,7 @@ export default class Update extends Vue {
   ]
   private activeStep: number = 0
   private course: Partial<CourseInput> = this.buildCourseInput({})
-  private imageTypes: string[] = ['bmp', 'jpg', 'jpeg', 'png', 'gif']
+  private imageTypes: string[] = ImageTypes
 
   private mounted() {
     if (!this.createMode && this.courseId) {

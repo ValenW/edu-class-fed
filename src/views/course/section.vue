@@ -21,7 +21,9 @@
         <span class="actions">
           <template v-if="isLesson(data)">
             <el-button>编辑</el-button>
-            <el-button type="success">上传视频</el-button>
+            <el-button type="success" @click="() => handleUploadVideo(data)">
+              上传视频
+            </el-button>
           </template>
           <template v-else>
             <el-button>编辑</el-button>
@@ -130,6 +132,13 @@ export default class CourseSection extends Vue {
     } catch (error) {
       this.$message.error(`排序失败: ${error}`)
     }
+  }
+
+  private handleUploadVideo(lesson: Lesson): void {
+    this.$router.push({
+      name: 'course-video',
+      params: { courseId: `${lesson.courseId}`, lessonId: `${lesson.id}` }
+    })
   }
 
   private isLesson(data: any): data is Lesson {

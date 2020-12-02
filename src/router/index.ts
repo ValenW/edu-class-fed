@@ -74,6 +74,15 @@ const routes: RouteConfig[] = [
         props: true
       },
       {
+        name: 'course-video',
+        path: '/course-video/:courseId/:lessonId',
+        component: () =>
+          import(
+            /* webpackChunkName: 'course-video' */ '@/views/course/video.vue'
+          ),
+        props: true
+      },
+      {
         name: 'menu',
         path: '/menu',
         component: () =>

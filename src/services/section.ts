@@ -84,3 +84,9 @@ export const updateLesson = (data: LessonFrom) =>
     method: 'POST',
     data
   })
+
+export const getLessonById = (lessonId: string | number) =>
+  lessonRequest({
+    url: '/getById',
+    params: { lessonId }
+  })

@@ -25,6 +25,7 @@
 
 <script lang="ts">
 import { uploadImage } from '@/services/course'
+import { buildAcceptStr } from '@/utils'
 import { Loading } from 'element-ui'
 import {
   ElUploadInternalRawFile,
@@ -85,7 +86,7 @@ export default class Uploader extends Vue {
   }
 
   private get accept(): string {
-    return this.acceptTypes.map(t => `.${t.toLowerCase()}`).join(', ')
+    return buildAcceptStr(this.acceptTypes)
   }
 }
 </script>
