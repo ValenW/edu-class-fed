@@ -7,7 +7,13 @@
       </el-row>
     </div>
 
-    <el-tree :data="sections" :props="displayConfig" node-key="id" draggable>
+    <el-tree
+      :data="sections"
+      :props="displayConfig"
+      node-key="id"
+      draggable
+      :allow-drop="allowDrop"
+    >
       <div class="node" slot-scope="{ node, data }">
         <span>{{ node.label }}</span>
 
@@ -21,7 +27,11 @@
             <el-button type="primary">添加课时</el-button>
           </template>
 
-          <el-select class="select-status" placeholder="请选择">
+          <el-select
+            class="select-status"
+            placeholder="请选择"
+            v-model="data.status"
+          >
             <el-option label="已隐藏" :value="0" />
             <el-option label="待更新" :value="1" />
             <el-option label="已更新" :value="2" />
@@ -43,6 +53,7 @@ import { Tree } from 'element-ui'
 import { TreeNode, TreeProps } from 'element-ui/types/tree'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
+type Node = TreeNode<string, Section> & TreeNode<string, Lesson>
 type TreeConfig<T> = {
   [key in keyof TreeProps]?:
     | keyof T
@@ -75,8 +86,29 @@ export default class CourseSection extends Vue {
     console.log(this.content)
   }
 
+  private allowDrop(
+    draggingNode: Node,
+    dropNode: Node,
+    type: 'prev' | 'inner' | 'next'
+  ): boolean {
+    const draggingData = draggingNode.data
+    const dropData = dropNode.data
+    if (this.isLesson(draggingData) && this.isLesson(dropData)) {
+      return draggingData.sectionId === dropData.sectionId && type !== 'inner'
+    } else if (this.isSection(draggingData) && this.isSection(dropData)) {
+      return type !== 'inner'
+    } else if (this.isLesson(draggingData) && this.isSection(dropData)) {
+      return draggingData.sectionId === dropData.id && type === 'inner'
+    }
+    return false
+  }
+
   private isLesson(data: any): data is Lesson {
     return typeof data.sectionId === 'number'
+  }
+
+  private isSection(data: any): data is Section {
+    return typeof data.sectionName === 'string' && !this.isLesson(data)
   }
 
   private get courseName(): string {
