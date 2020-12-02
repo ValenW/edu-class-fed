@@ -54,7 +54,7 @@ export default class CourseVideo extends Vue {
 
   private courseName: string = ''
   private lessonName: string = ''
-  private uploader = initUploader()
+  private uploader = initUploader({})
 
   private async created() {
     const [
@@ -85,9 +85,9 @@ export default class CourseVideo extends Vue {
       return
     }
 
-    console.log(video, image)
-
-    // TODO
+    this.uploader.addFile(video, null, null, null, { Vod: {} })
+    this.uploader.addFile(image, null, null, null, { Vod: {} })
+    this.uploader.startUpload()
   }
 
   private get acceptImage(): string {
