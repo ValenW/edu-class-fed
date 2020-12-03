@@ -1,12 +1,15 @@
 <template>
   <div class="header">
+    <el-button @click="handleCollapse" class="collapse-btn" type="text">
+      <i :class="collapse ? 'el-icon-s-unfold' : 'el-icon-s-fold'"></i>
+    </el-button>
+
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-      <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-      <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+      <el-breadcrumb-item>首页</el-breadcrumb-item>
+      <el-breadcrumb-item>{{ $store.state.title }}</el-breadcrumb-item>
     </el-breadcrumb>
-    <el-dropdown @command="handleCommand">
+
+    <el-dropdown @command="handleCommand" class="drop-menu">
       <span class="el-dropdown-link">
         <el-avatar
           shape="square"
@@ -57,6 +60,14 @@ export default class AppHeader extends Vue {
         .catch()
     }
   }
+
+  private handleCollapse() {
+    this.$store.commit('setCollapseSideMenu', !this.collapse)
+  }
+
+  private get collapse(): boolean {
+    return this.$store.state.collapseSideMenu
+  }
 }
 </script>
 
@@ -65,10 +76,18 @@ export default class AppHeader extends Vue {
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  .el-dropdown-link {
-    display: flex;
-    align-items: center;
+  padding: 0;
+  .collapse-btn {
+    height: 50px;
+    width: 50px;
+    font-size: larger;
+  }
+  .drop-menu {
+    margin-left: auto;
+    .el-dropdown-link {
+      display: flex;
+      align-items: center;
+    }
   }
 }
 </style>

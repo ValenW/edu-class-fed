@@ -5,12 +5,20 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: JSON.parse(window.localStorage.getItem('user') || '{}')
+    user: JSON.parse(window.localStorage.getItem('user') || '{}'),
+    collapseSideMenu: false,
+    title: ''
   },
   mutations: {
     setUser(state, payload) {
       state.user = payload
       window.localStorage.setItem('user', JSON.stringify(payload))
+    },
+    setCollapseSideMenu(state, payload) {
+      state.collapseSideMenu = payload
+    },
+    setTitle(state, payload) {
+      state.title = payload
     }
   },
   actions: {}

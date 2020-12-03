@@ -1,10 +1,10 @@
 <template>
-  <el-container>
-    <el-aside width="200px">
+  <el-container class="container">
+    <div class="aside">
       <Aside />
-    </el-aside>
+    </div>
     <el-container>
-      <el-header>
+      <el-header class="header" height="50px">
         <Header />
       </el-header>
       <el-main>
@@ -25,4 +25,16 @@ import Header from './components/header.vue'
 export default class index extends Vue {}
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.container {
+  height: 100vh;
+  .aside {
+    height: 100%;
+  }
+  .header {
+    background: white;
+    height: 50px;
+    padding: 0;
+  }
+}
+</style>
