@@ -5,10 +5,10 @@
         <el-row type="flex" justify="space-between">
           资源管理
           <div class="operations">
-            <el-button size="mini">
+            <el-button size="mini" @click="() => handleEdit()">
               添加资源
             </el-button>
-            <el-button size="mini">
+            <el-button size="mini" @click="handleCategory">
               资源分类
             </el-button>
           </div>
@@ -153,12 +153,12 @@ export default class ResourceList extends Vue {
   }
 
   private async handleEdit(item?: Resource) {
-    console.log('handle edit')
-
     this.createMode = !item
     this.dialogVisible = true
     this.init = item || {}
   }
+
+  private handleCategory() {}
 
   private onReset() {
     this.$refs.form.resetFields()
