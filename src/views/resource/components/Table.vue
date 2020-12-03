@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { Resource } from '@/services/resource'
+import { deleteResource, Resource } from '@/services/resource'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
 @Component
@@ -39,8 +39,19 @@ export default class Table extends Vue {
     this.$emit('edit', item)
   }
 
-  private handleDelete(item: Resource) {
-    console.log('handleDelete', item)
+  private async handleDelete(item: Resource) {
+    try {
+      const {
+        data: { code, mesg, data }
+      } = await deleteResource(item.id)
+      if (Number(code)) {
+        throw new Error('mesg')
+      }
+      this.$message.success('删除成功')
+      this.$emit('update')
+    } catch (err) {
+      this.$message.error(`删除失败: ${err}`)
+    }
   }
 }
 </script>

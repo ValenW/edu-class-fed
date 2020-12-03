@@ -48,7 +48,12 @@
         </el-form-item>
       </el-form>
 
-      <Table :loading="loading" :resources="resources" @edit="handleEdit" />
+      <Table
+        :loading="loading"
+        :resources="resources"
+        @edit="handleEdit"
+        @update="reloadResource()"
+      />
 
       <el-pagination
         @size-change="onSizeChange"

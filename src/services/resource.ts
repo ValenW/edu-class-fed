@@ -86,3 +86,9 @@ export const updateResource = (data: ResourceUpdateForm) =>
     method: 'POST',
     data
   })
+
+export const deleteResource = (id: string | number) =>
+  resourceRequest({
+    url: `/${id}`,
+    method: 'DELETE'
+  })
