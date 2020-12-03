@@ -74,6 +74,7 @@ export default class Update extends Vue {
 
   public resetFields() {
     this.$refs.form.resetFields()
+    this.form = {}
   }
 
   private get initForm(): Form {

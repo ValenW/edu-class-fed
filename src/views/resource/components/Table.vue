@@ -35,7 +35,6 @@ export default class Table extends Vue {
   private loading!: boolean
 
   private handleEdit(item: Resource) {
-    console.log('handleEdit', item)
     this.$emit('edit', item)
   }
 

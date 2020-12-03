@@ -39,7 +39,7 @@
       :createMode="createMode"
       :config="config"
       :init="init"
-      :name="'资源'"
+      :name="'资源分类'"
       :updateMethod="updateMethod"
       @update="loadData()"
     />

@@ -22,7 +22,12 @@
         </el-form-item>
       </el-form>
 
-      <Table :roles="roles" :loading="loading" />
+      <Table
+        :loading="loading"
+        :roles="roles"
+        @edit="handleEdit"
+        @update="loadData()"
+      />
 
       <el-pagination
         @size-change="onSizeChange"
@@ -37,31 +42,34 @@
       </el-pagination>
     </el-card>
 
-    <!-- TODO: implement edit function -->
-    <el-dialog
-      :title="isEdit ? '编辑角色' : '添加角色'"
+    <update-dialog
       :visible.sync="dialogVisible"
-      width="50%"
-    >
-      <create-or-edit
-        v-if="dialogVisible"
-        :role-id="roleId"
-        :is-edit="isEdit"
-        @success="onSuccess"
-        @cancel="dialogVisible = false"
-      />
-    </el-dialog>
+      :createMode="createMode"
+      :config="config"
+      :init="init"
+      :name="'角色'"
+      :updateMethod="updateMethod"
+      @update="loadData()"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import Table from './Table.vue'
-import { getByPage, Role, RoleQueryParam } from '@/services/role'
+import UpdateDialog from '@/component/Update/dialog.vue'
+import {
+  deleteRole,
+  getByPage,
+  Role,
+  RoleQueryParam,
+  updateRole
+} from '@/services/role'
 import { Form } from 'element-ui'
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import { FormConfig } from '@/component/Update/index.vue'
 
 @Component({
-  components: { Table }
+  components: { Table, UpdateDialog }
 })
 export default class RoleList extends Vue {
   $refs!: {
@@ -70,20 +78,28 @@ export default class RoleList extends Vue {
   private roles: Role[] = []
   private form: RoleQueryParam = {
     name: '',
-    current: 2,
+    current: 1,
     size: 20
   }
   private roleId?: number
   private loading: boolean = false
-  private dialogVisible: boolean = false
-  private isEdit: boolean = false
   private total: number = 0
 
+  private dialogVisible: boolean = false
+  private createMode: boolean = false
+  private config: FormConfig[] = [
+    { prop: 'name', label: '角色名称', type: 'text' },
+    { prop: 'code', label: '角色编码', type: 'text' },
+    { prop: 'description', label: '描述', type: 'textarea' }
+  ]
+  private init: FormData & any = {}
+  private updateMethod = updateRole
+
   private created() {
-    this.loadRoles()
+    this.loadData()
   }
 
-  private async loadRoles() {
+  private async loadData() {
     this.loading = true
     const {
       data: {
@@ -95,23 +111,23 @@ export default class RoleList extends Vue {
     this.loading = false
   }
 
-  private onSuccess() {
-    // this.dialogVisible = false
-    // this.loadRoles()
+  private handleAdd() {
+    this.handleEdit()
   }
 
-  private handleAdd() {
-    // this.isEdit = false
-    // this.dialogVisible = true
+  private async handleEdit(item?: Role) {
+    this.createMode = !item
+    this.dialogVisible = true
+    this.init = item || {}
   }
 
   private onSubmit() {
-    this.loadRoles()
+    this.loadData()
   }
 
   private onReset() {
     this.$refs.form.resetFields()
-    this.loadRoles()
+    this.reloadData()
   }
 
   private onSizeChange(val: number) {
@@ -125,7 +141,7 @@ export default class RoleList extends Vue {
 
   private reloadData(current: number = 1) {
     this.form.current = current
-    this.loadRoles()
+    this.loadData()
   }
 }
 </script>

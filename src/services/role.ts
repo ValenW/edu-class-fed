@@ -25,6 +25,13 @@ export type RoleQueryParam = {
   size?: number
 }
 
+export type RoleForm = {
+  id?: number
+  code: string
+  name: string
+  description?: string
+}
+
 export const getByPage = (data: RoleQueryParam) =>
   roleRequest({
     url: '/getRolePages',
@@ -47,4 +54,17 @@ export const assignRolesToUser = (userId: number, roleIdList: number[]) =>
     url: 'allocateUserRoles',
     method: 'POST',
     data: { userId, roleIdList }
+  })
+
+export const updateRole = (data: RoleForm) =>
+  roleRequest({
+    url: '/saveOrUpdate',
+    method: 'POST',
+    data
+  })
+
+export const deleteRole = (id: string | number) =>
+  roleRequest({
+    url: `/${id}`,
+    method: 'DELETE'
   })
