@@ -35,7 +35,7 @@
 import { getById } from '@/services/course'
 import { getLessonById } from '@/services/section'
 import { buildAcceptStr, ImageTypes, VideoTypes } from '@/utils'
-import { initUploader } from '@/utils/aliyun'
+import { initUploader, UploadInfo } from '@/utils/aliyun'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
 @Component({
@@ -85,10 +85,18 @@ export default class CourseVideo extends Vue {
       return
     }
 
-    this.uploader.addFile(video, null, null, null, { Vod: {} })
-    this.uploader.addFile(image, null, null, null, { Vod: {} })
+    const paramData = JSON.stringify({ Vod: {} })
+    this.uploader.addFile(video, null, null, null, paramData)
+    this.uploader.addFile(image, null, null, null, paramData)
     this.uploader.startUpload()
   }
+
+  private onUploadStarted(uploadInfo: UploadInfo) {
+    // TODO
+  }
+
+  private onUploadProgress() {}
+  private onUploadEnd() {}
 
   private get acceptImage(): string {
     return buildAcceptStr(ImageTypes)

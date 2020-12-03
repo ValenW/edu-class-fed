@@ -1,4 +1,13 @@
-type UploadInfo = {}
+export type UploadInfo = {
+  file: File
+  fileHash: string
+  isImage: boolean
+  retry: boolean
+  ri: string
+  state: string
+  userData: string
+  videoInfo: any
+}
 
 export type UploaderConfig = {
   // 阿里账号ID，必须有值
