@@ -1,7 +1,9 @@
 import { buildRequestWithBaseUrl } from '@/utils/request'
 
-const baseUrl = '/boss/resource'
-const resourceRequest = buildRequestWithBaseUrl(baseUrl)
+const resourceUrl = '/boss/resource'
+const resourceRequest = buildRequestWithBaseUrl(resourceUrl)
+const categoryUrl = '/boss/resource/category'
+const categoryRequest = buildRequestWithBaseUrl(categoryUrl)
 
 export type ResourceQueryParam = {
   id?: number
@@ -46,6 +48,11 @@ export type ResourceUpdateForm = {
   url: string
   description?: string
 }
+export type CategoryUpdateForm = {
+  id: number
+  name: string
+  sort: number
+}
 
 export const getByPage = (data: ResourceQueryParam) =>
   resourceRequest({
@@ -89,6 +96,19 @@ export const updateResource = (data: ResourceUpdateForm) =>
 
 export const deleteResource = (id: string | number) =>
   resourceRequest({
+    url: `/${id}`,
+    method: 'DELETE'
+  })
+
+export const updateCategory = (data: CategoryUpdateForm) =>
+  categoryRequest({
+    url: '/saveOrderUpdate',
+    method: 'POST',
+    data
+  })
+
+export const deleteCategory = (id: string | number) =>
+  categoryRequest({
     url: `/${id}`,
     method: 'DELETE'
   })

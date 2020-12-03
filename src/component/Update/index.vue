@@ -14,12 +14,14 @@
       <el-input-number
         v-model="form[item.prop]"
         v-else-if="item.type === 'number'"
+        :min="item.config && item.config.min"
+        :max="item.config && item.config.max"
       />
 
       <el-select
         v-model="form[item.prop]"
         v-else-if="item.type === 'select'"
-        placeholder="请选择上级菜单"
+        :placeholder="item.config.placeHolder"
       >
         <el-option
           v-for="{ value, label } in item.selects"
@@ -47,6 +49,7 @@ export type FormConfig = {
   config?: Partial<{
     min: number
     max: number
+    placeHolder: string
   }>
   default?: string | number
   selects?: { value: string | number; label: string }[]
