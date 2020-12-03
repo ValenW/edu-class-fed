@@ -2,7 +2,7 @@
   <el-card>
     <div slot="header" class="clearfix">
       <el-row type="flex" justify="space-between">
-        {{ courseName }}
+        <span><a @click="$router.back()">&lt;</a>{{ courseName }}</span>
         <div class="operations"></div>
       </el-row>
     </div>

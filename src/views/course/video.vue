@@ -2,7 +2,7 @@
   <el-card>
     <div slot="header" class="clearfix">
       <el-row type="flex" justify="space-between">
-        课时视频上传
+        <span><a @click="$router.back()">&lt;</a>课时视频上传</span>
         <div class="operations"></div>
       </el-row>
     </div>

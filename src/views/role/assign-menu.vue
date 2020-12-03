@@ -1,8 +1,8 @@
 <template>
   <el-card class="box-card">
     <div slot="header" class="clearfix">
-      <el-row type="flex" justify="space-between">
-        分配菜单
+      <el-row type="flex">
+        <span><a @click="$router.back()">&lt;</a>分配菜单</span>
       </el-row>
     </div>
 

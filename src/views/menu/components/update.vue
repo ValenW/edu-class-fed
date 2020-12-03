@@ -2,7 +2,10 @@
   <div :class="`menu-${createMode ? 'create' : 'edit'}`">
     <el-card class="menu">
       <div slot="header" class="clearfix">
-        <span>{{ createMode ? '添加菜单' : '更新菜单' }}</span>
+        <span>
+          <a @click="$router.back()">&lt;</a>
+          {{ createMode ? '添加菜单' : '更新菜单' }}
+        </span>
       </div>
       <el-form ref="form" :model="form" label-width="80px">
         <el-form-item label="菜单名称" prop="name">
