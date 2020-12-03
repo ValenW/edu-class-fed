@@ -163,7 +163,9 @@ export default class ResourceList extends Vue {
     this.init = item || {}
   }
 
-  private handleCategory() {}
+  private handleCategory() {
+    this.$router.push({ name: 'category' })
+  }
 
   private onReset() {
     this.$refs.form.resetFields()

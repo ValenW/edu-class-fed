@@ -111,6 +111,14 @@ const routes: RouteConfig[] = [
           )
       },
       {
+        name: 'category',
+        path: '/category',
+        component: () =>
+          import(
+            /* webpackChunkName: 'category' */ '@/views/resource/category.vue'
+          )
+      },
+      {
         name: 'role',
         path: '/role',
         component: () =>
