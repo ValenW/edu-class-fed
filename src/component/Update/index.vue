@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { Form as ElementForm } from 'element-ui'
 
 export type FormConfig = {
@@ -49,10 +49,10 @@ export type FormConfig = {
     max: number
   }>
   default?: string | number
-  selects?: { value: string; label: string }[]
+  selects?: { value: string | number; label: string }[]
 }
 export type Form = {
-  [key: string]: string | number | undefined
+  [key: string]: string | number | boolean | undefined
 }
 
 @Component
@@ -73,19 +73,25 @@ export default class Update extends Vue {
     this.$refs.form.resetFields()
   }
 
-  private created() {
-    this.initForm()
+  private get initForm(): Form {
+    const data = this.config.reduce((acc, cur) => {
+      const prop = cur.prop
+      const initValue =
+        (typeof this.init[prop] !== 'undefined' && this.init[prop]) || undefined
+      const defaultValue =
+        (typeof cur.default !== 'undefined' && cur.default) || undefined
+      acc[prop] = (initValue !== undefined && initValue) || defaultValue
+      return acc
+    }, {} as Form)
+    return {
+      ...this.init,
+      ...data
+    }
   }
 
-  private initForm() {
-    this.config.forEach(c => {
-      const initValue =
-        (typeof this.init[c.prop] !== 'undefined' && this.init[c.prop]) ||
-        undefined
-      const defaultValue =
-        (typeof c.default !== 'undefined' && c.default) || undefined
-      this.form[c.prop] = (initValue === undefined && initValue) || defaultValue
-    })
+  @Watch('initForm', { immediate: true })
+  updateForm(newValue: Form) {
+    this.form = newValue
   }
 }
 </script>

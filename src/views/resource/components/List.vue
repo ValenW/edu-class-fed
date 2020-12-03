@@ -29,10 +29,10 @@
             clearable
           >
             <el-option
-              :label="item.name"
-              :value="item.id"
-              v-for="item in resourceCategories"
-              :key="item.id"
+              v-for="{ label, value } in categorySelects"
+              :label="label"
+              :value="value"
+              :key="value"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -63,9 +63,15 @@
       </el-pagination>
     </el-card>
 
-    <el-dialog>
-      <!-- <update-dialog :visible="dialogVisible" :createMode="createMode" /> -->
-    </el-dialog>
+    <update-dialog
+      :visible.sync="dialogVisible"
+      :createMode="createMode"
+      :config="config"
+      :init="init"
+      :name="'资源'"
+      :updateMethod="updateMethod"
+      @update="reloadResource()"
+    />
   </div>
 </template>
 
@@ -78,9 +84,11 @@ import {
   getByPage,
   Resource,
   ResourceCategory,
-  ResourceQueryParam
+  ResourceQueryParam,
+  updateResource
 } from '@/services/resource'
 import UpdateDialog from '@/component/Update/dialog.vue'
+import { FormConfig, Form as FormData } from '@/component/Update/index.vue'
 
 @Component({
   components: { Table, UpdateDialog }
@@ -95,6 +103,22 @@ export default class ResourceList extends Vue {
   private form: ResourceQueryParam = {}
   private total: number = 0
   private loading: boolean = true
+
+  private dialogVisible: boolean = false
+  private createMode: boolean = false
+  private config: FormConfig[] = [
+    { prop: 'name', label: '资源名称', type: 'text' },
+    {
+      prop: 'categoryId',
+      label: '资源分类',
+      type: 'select',
+      selects: this.categorySelects
+    },
+    { prop: 'url', label: '资源路径', type: 'text' },
+    { prop: 'description', label: '描述', type: 'textarea' }
+  ]
+  private init: FormData = {}
+  private updateMethod = updateResource
 
   private created() {
     this.reloadResource()
@@ -128,8 +152,12 @@ export default class ResourceList extends Vue {
     this.resourceCategories = data
   }
 
-  private async handleEdit(editMode: boolean = true) {
-    // TODO
+  private async handleEdit(item?: Resource) {
+    console.log('handle edit')
+
+    this.createMode = !item
+    this.dialogVisible = true
+    this.init = item || {}
   }
 
   private onReset() {
@@ -144,6 +172,20 @@ export default class ResourceList extends Vue {
 
   private onCurrentChange(val: number) {
     this.reloadResource(val)
+  }
+
+  private get categorySelects(): { value: string | number; label: string }[] {
+    const result = this.resourceCategories.map(r => ({
+      value: r.id,
+      label: r.name
+    }))
+    if (this.config) {
+      const categoryIdConfig = this.config.find(c => c.prop === 'categoryId')
+      if (categoryIdConfig) {
+        categoryIdConfig.selects = result
+      }
+    }
+    return result
   }
 }
 </script>

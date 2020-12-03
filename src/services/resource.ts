@@ -39,6 +39,14 @@ export type ResourceCategory = {
   resourceList?: Resource[]
 }
 
+export type ResourceUpdateForm = {
+  id?: number
+  name: string
+  categoryId: number
+  url: string
+  description?: string
+}
+
 export const getByPage = (data: ResourceQueryParam) =>
   resourceRequest({
     method: 'POST',
@@ -70,4 +78,11 @@ export const assignResourceToRole = (
     url: '/allocateRoleResources',
     method: 'POST',
     data: { resourceIdList, roleId }
+  })
+
+export const updateResource = (data: ResourceUpdateForm) =>
+  resourceRequest({
+    url: '/saveOrUpdate',
+    method: 'POST',
+    data
   })

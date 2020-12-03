@@ -1,44 +1,29 @@
 <template>
   <el-dialog
     :title="title"
-    :visible.sync="visible"
+    :visible.sync="dialogVisible"
     width="30%"
     :before-close="handleClose"
   >
-    <FormIndex :config="config" :init="init" />
+    <FormIndex ref="form" :config="config" :init="init" />
 
     <span slot="footer" class="dialog-footer">
       <el-button type="primary" @click="onSubmit">提交</el-button>
       <el-button v-if="createMode" @click="onReset">重置</el-button>
-      <el-button @click="visible = false">取消</el-button>
+      <el-button @click="handleClose">取消</el-button>
     </span>
   </el-dialog>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { Form as ElementForm } from 'element-ui'
-import FormIndex from './index.vue'
-
-type FormConfig = {
-  label: string
-  prop: string
-  type: 'text' | 'number' | 'boolean' | 'select' | 'textarea'
-  config?: Partial<{
-    min: number
-    max: number
-  }>
-  default?: string | number
-  selects?: { value: string; label: string }[]
-}
-type Form = {
-  [prop: string]: string | number
-}
+import FormIndex, { FormConfig, Form } from './index.vue'
 
 @Component({
   components: { FormIndex }
 })
-export default class Update extends Vue {
+export default class UpdateDialog extends Vue {
   @Prop({ type: Boolean, default: false })
   private createMode!: boolean
 
@@ -59,21 +44,29 @@ export default class Update extends Vue {
   @Prop({ type: Boolean, default: false })
   private visible!: boolean
 
+  private dialogVisible: boolean = false
+
+  @Watch('visible')
+  changeVisible(newValue: boolean) {
+    this.dialogVisible = newValue
+  }
+
   $refs!: {
-    form: ElementForm
+    form: FormIndex
   }
 
   private async onSubmit() {
     try {
       const {
         data: { code, mesg }
-      } = await this.updateMethod(this.init)
+      } = await this.updateMethod(this.$refs.form.form)
 
       if (Number(code)) {
         throw new Error('mesg')
       }
       this.$message.success(`${this.title}成功`)
       this.$emit('update', true)
+      this.handleClose()
     } catch (error) {
       this.$message.error(`${this.title}失败: ${error} 请联系管理员`)
     }
@@ -81,6 +74,10 @@ export default class Update extends Vue {
 
   private onReset() {
     this.$refs.form.resetFields()
+  }
+
+  private handleClose() {
+    this.$emit('update:visible', false)
   }
 
   private get title(): string {

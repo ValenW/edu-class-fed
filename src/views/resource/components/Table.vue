@@ -34,12 +34,13 @@ export default class Table extends Vue {
   @Prop({ type: Boolean, default: false })
   private loading!: boolean
 
-  private handleEdit(item: any) {
+  private handleEdit(item: Resource) {
     console.log('handleEdit', item)
+    this.$emit('edit', item)
   }
 
-  private handleDelete(item: any) {
-    this.$emit('edit', item)
+  private handleDelete(item: Resource) {
+    console.log('handleDelete', item)
   }
 }
 </script>
