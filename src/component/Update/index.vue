@@ -21,7 +21,7 @@
       <el-select
         v-model="form[item.prop]"
         v-else-if="item.type === 'select'"
-        :placeholder="item.config.placeHolder"
+        :placeholder="item.config && item.config.placeHolder"
       >
         <el-option
           v-for="{ value, label } in item.selects"
