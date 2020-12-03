@@ -77,15 +77,20 @@ export default class AssignResource extends Vue {
   }
 
   private async onSave() {
+    const keys = this.$refs.tree.getCheckedNodes().reduce((acc, cur) => {
+      if (!cur.children) {
+        acc.push(cur.id)
+      }
+      return acc
+    }, [] as number[])
     const {
       data: { code, mesg }
-    } = await assignResourceToRole(
-      this.$refs.tree.getCheckedKeys(),
-      this.roleId
-    )
+    } = await assignResourceToRole(keys, this.roleId)
     if (Number.parseInt(code)) {
       this.$message.error(`更新资源失败, 请联系管理员. 错误信息: ${mesg}`)
     }
+    this.$message.success('更新成功')
+    this.$router.back()
   }
 
   private onReset() {
@@ -94,7 +99,7 @@ export default class AssignResource extends Vue {
 
   private get structureResources(): TreeData[] {
     return this.categories.map(c => ({
-      id: c.id,
+      id: `c-${c.id}`,
       label: c.name,
       children: this.resources
         .filter(r => r.categoryId === c.id)
@@ -113,11 +118,10 @@ export default class AssignResource extends Vue {
     resources: { id: number; selected: boolean; resourceList?: Resource[] }[]
   ): number[] {
     return resources.reduce((acc, cur) => {
-      if (cur.selected) {
-        acc.push(cur.id)
-      }
       if (cur.resourceList) {
         acc.push(...this.getSelectedKeys(cur.resourceList))
+      } else if (cur.selected) {
+        acc.push(cur.id)
       }
       return acc
     }, [] as number[])

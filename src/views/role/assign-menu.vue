@@ -75,6 +75,8 @@ export default class AssignMenu extends Vue {
     if (Number.parseInt(code)) {
       this.$message.error(`更新菜单失败, 请联系管理员. 错误信息: ${mesg}`)
     }
+    this.$message.success('更新成功')
+    this.$router.back()
   }
 
   private onReset() {
