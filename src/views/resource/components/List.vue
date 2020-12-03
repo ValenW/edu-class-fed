@@ -48,7 +48,7 @@
         </el-form-item>
       </el-form>
 
-      <Table :loading="loading" :resources="resources" />
+      <Table :loading="loading" :resources="resources" @edit="handleEdit" />
 
       <el-pagination
         @size-change="onSizeChange"
@@ -62,6 +62,10 @@
       >
       </el-pagination>
     </el-card>
+
+    <el-dialog>
+      <!-- <update-dialog :visible="dialogVisible" :createMode="createMode" /> -->
+    </el-dialog>
   </div>
 </template>
 
@@ -76,9 +80,10 @@ import {
   ResourceCategory,
   ResourceQueryParam
 } from '@/services/resource'
+import UpdateDialog from '@/component/Update/dialog.vue'
 
 @Component({
-  components: { Table }
+  components: { Table, UpdateDialog }
 })
 export default class ResourceList extends Vue {
   $refs!: {
@@ -121,6 +126,10 @@ export default class ResourceList extends Vue {
       data: { data }
     } = await getAllCategory()
     this.resourceCategories = data
+  }
+
+  private async handleEdit(editMode: boolean = true) {
+    // TODO
   }
 
   private onReset() {

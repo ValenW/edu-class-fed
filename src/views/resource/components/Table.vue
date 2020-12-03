@@ -39,7 +39,7 @@ export default class Table extends Vue {
   }
 
   private handleDelete(item: any) {
-    console.log('handleDelete', item)
+    this.$emit('edit', item)
   }
 }
 </script>
