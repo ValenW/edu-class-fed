@@ -61,7 +61,7 @@ const DefaultConfig: UploaderConfig = {
     console.log('onUploadFailed', uploadInfo)
   },
   onUploadProgress: (uploadInfo, totalSize, loadedPercent) => {
-    console.log('onUploadProgress', uploadInfo)
+    console.log('onUploadProgress', uploadInfo, totalSize, loadedPercent)
   },
   onUploadTokenExpired: uploadInfo => {
     console.log('onUploadTokenExpired', uploadInfo)

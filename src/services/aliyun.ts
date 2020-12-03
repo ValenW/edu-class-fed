@@ -26,12 +26,29 @@ type TransCodeForm = Partial<{
   durationNum: number
 }>
 
+type AddressAuthInfo = {
+  requestId: string
+  uploadAddress: string
+  uploadAuth: string
+}
+type VideoAddressAuth = AddressAuthInfo & {
+  videoId: string
+}
+type ImageAddressAuth = AddressAuthInfo & {
+  fileURL: string
+  imageId: string
+  imageURL: string
+}
+
 export const getUploadImageAddressAuth = () =>
   aliyunRequest({
     url: '/aliyunImagUploadAddressAdnAuth.json'
   })
 
-export const getUploadVideoAddressAuth = (fileName: string, imageUrl: string) =>
+export const getUploadVideoAddressAuth = (
+  fileName: string,
+  imageUrl?: string
+) =>
   aliyunRequest({
     url: '/aliyunVideoUploadAddressAdnAuth.json',
     params: { fileName, imageUrl }
