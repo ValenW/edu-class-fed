@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import Update from './components/update.vue'
+import Update from './components/Update.vue'
 
 @Component({
   components: { Update }
