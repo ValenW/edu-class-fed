@@ -48,6 +48,7 @@ export const getAd = () =>
 export const updateAd = (data: AdForm) =>
   adRequest({
     url: '/saveOrUpdate',
+    method: 'POST',
     data
   })
 
@@ -59,5 +60,6 @@ export const getSpace = () =>
 export const updateSpace = (data: AdSpaceForm) =>
   adSpaceRequest({
     url: '/saveOrUpdate',
+    method: 'POST',
     data
   })
