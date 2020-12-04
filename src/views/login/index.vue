@@ -87,7 +87,7 @@ export default class LoginIndex extends Vue {
       await this.$refs.form.validate()
       return true
     } catch (err) {
-      console.log('validate form failed', err)
+      this.$message.error('登录出错')
     }
     return false
   }

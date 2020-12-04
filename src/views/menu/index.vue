@@ -65,11 +65,9 @@ export default class MenuIndex extends Vue {
       name: 'menu-edit',
       params: { id: `${menu.id}` }
     })
-    console.log('handleEdit', menu)
   }
 
   private handleDelete(menu: Menu) {
-    console.log('handleDelete', menu)
     this.$confirm('确认删除?', '删除菜单', {})
       .then(async () => {
         const {
