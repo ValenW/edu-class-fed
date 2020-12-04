@@ -68,7 +68,14 @@
 
 <script lang="ts">
 import { Form, FormConfig } from '@/component/Update/index.vue'
-import { Ad, AdSpace, getAd, getSpace, updateSpace } from '@/services/advert'
+import {
+  Ad,
+  AdSpace,
+  getAd,
+  getSpace,
+  updateAd,
+  updateSpace
+} from '@/services/advert'
 import UpdateCard from '@/component/Update/card.vue'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
@@ -111,6 +118,24 @@ export default class AdvertSpaceIndex extends Vue {
     this.createMode = !item
     this.dialogVisible = true
     this.init = item || {}
+  }
+
+  private async handleStateChange(item: Ad) {
+    this.$set(this.adUpdating, item.id, true)
+    try {
+      const {
+        data: { data, code, mesg }
+      } = await updateAd(item)
+      if (Number.parseInt(code)) {
+        throw new Error(mesg)
+      }
+      this.$message.success(`${item.status ? '上线' : '下线'}成功`)
+    } catch (error) {
+      this.$message.error(`Error when change state: ${error}`)
+      item.status = item.status ? 0 : 1
+    } finally {
+      this.$set(this.adUpdating, item.id, false)
+    }
   }
 
   private get spacesName(): Record<number, string> {
