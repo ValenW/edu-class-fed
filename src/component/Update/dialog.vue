@@ -49,6 +49,9 @@ export default class UpdateDialog extends Vue {
   @Watch('visible')
   changeVisible(newValue: boolean) {
     this.dialogVisible = newValue
+    if (newValue) {
+      this.$nextTick(() => this.$refs.form.formComp.clearValidate())
+    }
   }
 
   $refs!: {
@@ -56,6 +59,9 @@ export default class UpdateDialog extends Vue {
   }
 
   private async onSubmit() {
+    if (!(await this.$refs.form.formComp.validate())) {
+      return
+    }
     try {
       const {
         data: { code, mesg }

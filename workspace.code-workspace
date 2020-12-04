@@ -17,6 +17,7 @@
       "clearfix",
       "daterange",
       "mesg",
+      "prepend",
       "refreshtoken",
       "wangeditor"
     ]

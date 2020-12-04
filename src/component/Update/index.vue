@@ -5,23 +5,30 @@
       :key="index"
       :label="item.label"
       :prop="item.prop"
+      :required="item.required"
     >
-      <el-radio-group v-model="form[item.prop]" v-if="item.type === 'boolean'">
-        <el-radio :label="true">是</el-radio>
-        <el-radio :label="false">否</el-radio>
-      </el-radio-group>
+      <el-switch
+        v-model="form[item.prop]"
+        v-if="item.type === 'boolean'"
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+        :active-value="true"
+        :inactive-value="false"
+      />
 
       <el-input-number
         v-model="form[item.prop]"
         v-else-if="item.type === 'number'"
         :min="item.config && item.config.min"
         :max="item.config && item.config.max"
+        :disabled="item.disabled"
       />
 
       <el-select
         v-model="form[item.prop]"
         v-else-if="item.type === 'select'"
         :placeholder="item.config && item.config.placeHolder"
+        :disabled="item.disabled"
       >
         <el-option
           v-for="{ value, label } in item.selects"
@@ -31,7 +38,19 @@
         />
       </el-select>
 
-      <el-input v-else v-model="form[item.prop]" :type="item.type" />
+      <el-input
+        v-else
+        v-model="form[item.prop]"
+        :type="(item.config && item.config.type) || item.type"
+        :disabled="item.disabled"
+      >
+        <template slot="prepend" v-if="item.config && item.config.prepend">
+          {{ item.config.prepend }}
+        </template>
+        <template slot="append" v-if="item.config && item.config.append">
+          {{ item.config.append }}
+        </template>
+      </el-input>
     </el-form-item>
 
     <slot></slot>
@@ -50,7 +69,12 @@ export type FormConfig = {
     min: number
     max: number
     placeHolder: string
+    append: string
+    prepend: string
+    type: string
   }>
+  required?: boolean
+  disabled?: boolean
   default?: string | number
   selects?: { value: string | number; label: string }[]
 }
@@ -72,9 +96,13 @@ export default class Update extends Vue {
     form: ElementForm
   }
 
+  public get formComp(): ElementForm {
+    return this.$refs.form
+  }
+
   public resetFields() {
     this.$refs.form.resetFields()
-    this.form = {}
+    this.form = this.initForm
   }
 
   private get initForm(): Form {
@@ -85,6 +113,9 @@ export default class Update extends Vue {
       const defaultValue =
         (typeof cur.default !== 'undefined' && cur.default) || undefined
       acc[prop] = (initValue !== undefined && initValue) || defaultValue
+      if (cur.type === 'boolean' && acc[prop] === undefined) {
+        acc[prop] = false
+      }
       return acc
     }, {} as Form)
     return {

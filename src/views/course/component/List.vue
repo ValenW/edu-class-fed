@@ -2,7 +2,7 @@
   <el-card>
     <div slot="header" class="clearfix">
       <el-row type="flex" justify="space-between">
-        用户管理
+        课程管理
         <div class="operations">
           <el-button
             type="primary"
@@ -162,6 +162,7 @@ export default class List extends Vue {
       if (Number.parseInt(code)) {
         throw new Error(mesg)
       }
+      this.$message.success(`${course.status ? '上架' : '下架'}成功`)
     } catch (error) {
       this.$message.error(`Error when change state: ${error}`)
       course.status = course.status ? 0 : 1

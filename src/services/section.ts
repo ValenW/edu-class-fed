@@ -23,6 +23,7 @@ export type Section = {
   description: string
   sectionName: string
   courseLessons: Lesson[]
+  lessonDTOS: Lesson[]
 }
 
 export type Lesson = {
@@ -32,7 +33,7 @@ export type Lesson = {
   theme: string
 
   status: number
-  duration: string
+  duration: number
 
   canPlay: boolean
   hasLearned: boolean
@@ -66,7 +67,7 @@ export type LessonFrom = Partial<{
 }>
 
 export const getSectionAndLesson = (courseId: string | number) =>
-  sectionFrontRequest({
+  sectionRequest({
     url: '/getSectionAndLesson',
     params: { courseId }
   })

@@ -66,7 +66,7 @@ import {
 } from '@/services/role'
 import { Form } from 'element-ui'
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { FormConfig } from '@/component/Update/index.vue'
+import { FormConfig, Form as FormData } from '@/component/Update/index.vue'
 
 @Component({
   components: { Table, UpdateDialog }
