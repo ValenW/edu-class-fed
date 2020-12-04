@@ -17,16 +17,16 @@
         <div class="operations"></div>
       </el-row>
     </div>
-    <Update :create-mode="false" :course-id="courseId" />
+    <Uploader :create-mode="false" :course-id="courseId" />
   </el-card>
 </template>
 
 <script lang="ts">
-import Update from './component/Update.vue'
+import Uploader from '@/component/Uploader/index.vue'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
 @Component({
-  components: { Update }
+  components: { Uploader }
 })
 export default class EditCourse extends Vue {
   @Prop({ required: true })
