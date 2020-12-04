@@ -53,16 +53,6 @@
         </template>
       </el-table-column>
     </el-table>
-
-    <!-- <update-card
-      :visible.sync="dialogVisible"
-      :createMode="createMode"
-      :config="config"
-      :init="init"
-      :name="'广告位'"
-      :updateMethod="updateMethod"
-      @update="loadData()"
-    /> -->
   </el-card>
 </template>
 
@@ -76,10 +66,9 @@ import {
   updateAd,
   updateSpace
 } from '@/services/advert'
-import UpdateCard from '@/component/Update/card.vue'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
-@Component({ components: { UpdateCard } })
+@Component
 export default class AdvertSpaceIndex extends Vue {
   private data: Ad[] = []
   private spaces: AdSpace[] = []
@@ -111,13 +100,11 @@ export default class AdvertSpaceIndex extends Vue {
   }
 
   private handleAdd() {
-    this.handleEdit()
+    // this.handleEdit()
   }
 
-  private async handleEdit(item?: Ad) {
-    this.createMode = !item
-    this.dialogVisible = true
-    this.init = item || {}
+  private async handleEdit({ id }: Ad) {
+    this.$router.push({ name: 'advert-edit', params: { adId: `${id}` } })
   }
 
   private async handleStateChange(item: Ad) {
