@@ -63,3 +63,9 @@ export const updateSpace = (data: AdSpaceForm) =>
     method: 'POST',
     data
   })
+
+export const getById = (id: string | number) =>
+  adRequest({
+    url: '/getAdById',
+    params: { id }
+  })

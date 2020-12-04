@@ -30,8 +30,8 @@
       </el-table-column>
       <el-table-column prop="updateTime" label="时间" min-width="100px">
         <template slot-scope="{ row }">
-          <div>开始时间: {{ row.startTime }}</div>
-          <div>结束时间: {{ row.endTime }}</div>
+          <div>开始时间: {{ row.startTimeFormatString }}</div>
+          <div>结束时间: {{ row.endTimeFormatString }}</div>
         </template>
       </el-table-column>
       <el-table-column prop="updateTime" label="上线/下线" align="center">
@@ -100,11 +100,11 @@ export default class AdvertSpaceIndex extends Vue {
   }
 
   private handleAdd() {
-    // this.handleEdit()
+    this.$router.push({ name: 'advert-update' })
   }
 
   private async handleEdit({ id }: Ad) {
-    this.$router.push({ name: 'advert-edit', params: { adId: `${id}` } })
+    this.$router.push({ name: 'advert-update', params: { adId: `${id}` } })
   }
 
   private async handleStateChange(item: Ad) {

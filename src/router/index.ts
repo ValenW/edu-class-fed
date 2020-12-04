@@ -34,11 +34,11 @@ const routes: RouteConfig[] = [
           import(/* webpackChunkName: 'advert' */ '@/views/advert/index.vue')
       },
       {
-        name: 'advert-edit',
-        path: '/:adId/advert-edit',
+        name: 'advert-update',
+        path: '/advert-update/:?adId',
         component: () =>
           import(
-            /* webpackChunkName: 'advert-edit' */ '@/views/advert/edit.vue'
+            /* webpackChunkName: 'advert-update' */ '@/views/advert/update.vue'
           ),
         props: true
       },
