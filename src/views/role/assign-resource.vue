@@ -2,7 +2,18 @@
   <el-card class="box-card">
     <div slot="header" class="clearfix">
       <el-row type="flex">
-        <span><a @click="$router.back()">&lt;</a>分配资源</span>
+        <span>
+          <el-button
+            icon="el-icon-arrow-left"
+            size="mini"
+            @click="$router.back()"
+            type="text"
+          >
+            返回
+          </el-button>
+          <el-divider direction="vertical"></el-divider>
+          分配资源
+        </span>
       </el-row>
     </div>
 

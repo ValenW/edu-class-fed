@@ -2,7 +2,18 @@
   <el-card>
     <div slot="header" class="clearfix">
       <el-row type="flex" justify="space-between">
-        <span><a @click="$router.back()">&lt;</a>新建课程</span>
+        <span>
+          <el-button
+            icon="el-icon-arrow-left"
+            size="mini"
+            @click="$router.back()"
+            type="text"
+          >
+            返回
+          </el-button>
+          <el-divider direction="vertical"></el-divider>
+          新建课程
+        </span>
         <div class="operations"></div>
       </el-row>
     </div>
