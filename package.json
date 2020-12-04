@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "preversion": "vue-cli-service build && node test-serve/app.js"
+    "preversion": "vue-cli-service build && node test-serve/app.js",
+    "cb:deploy": "tcb framework:deploy"
   },
   "dependencies": {
     "axios": "^0.21.0",
